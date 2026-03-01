@@ -15,9 +15,6 @@ A modern, responsive developer portfolio built with Next.js and TypeScript to sh
 - Optimized performance
 - Clean component architecture
 
-## 📸 Screenshots
-(Add screenshots here)
-
 ## 🌍 Live Demo
 https://kaghim.vercel.app/
 
