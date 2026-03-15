@@ -8,17 +8,29 @@ import { ExternalLink, Github } from "lucide-react"
 import { portfolioData } from "@/data/portfolio"
 import { SectionWrapper, SectionHeading } from "./section-wrapper"
 
+// Category-based filters — change these as you add more projects
+const CATEGORIES = [
+  { label: "All", value: null },
+  { label: "Frontend", value: "Frontend" },
+  { label: "Full Stack", value: "Full Stack" },
+  { label: "Open Source", value: "Open Source" },
+]
+
+// Maps each project id to its display category
+const PROJECT_CATEGORIES: Record<number, string[]> = {
+  1: ["Frontend"],
+  2: ["Full Stack"],
+}
+
 export function ProjectsSection() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: "-80px" })
-  const [activeTag, setActiveTag] = useState<string | null>(null)
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
-  const allTags = Array.from(
-    new Set(portfolioData.projects.flatMap((p) => p.tags))
-  )
-
-  const filtered = activeTag
-    ? portfolioData.projects.filter((p) => p.tags.includes(activeTag))
+  const filtered = activeCategory
+    ? portfolioData.projects.filter((p) =>
+        PROJECT_CATEGORIES[p.id]?.includes(activeCategory)
+      )
     : portfolioData.projects
 
   return (
@@ -28,29 +40,19 @@ export function ProjectsSection() {
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading label="03" title="Featured Projects" />
 
-        {/* Tag filters */}
+        {/* Category filters */}
         <div className="mb-10 flex flex-wrap gap-2">
-          <button
-            onClick={() => setActiveTag(null)}
-            className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
-              activeTag === null
-                ? "bg-primary text-primary-foreground"
-                : "border border-border bg-secondary text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            All
-          </button>
-          {allTags.map((tag) => (
+          {CATEGORIES.map((cat) => (
             <button
-              key={tag}
-              onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+              key={cat.label}
+              onClick={() => setActiveCategory(cat.value)}
               className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
-                activeTag === tag
+                activeCategory === cat.value
                   ? "bg-primary text-primary-foreground"
                   : "border border-border bg-secondary text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tag}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -74,14 +76,9 @@ export function ProjectsSection() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                {/* Fallback gradient */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary to-secondary" />
-                <div className="absolute inset-0 flex items-center justify-center font-mono text-lg font-bold text-muted-foreground/40">
-                  {project.title}
-                </div>
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 flex items-center justify-center gap-4 bg-background/80 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                {/* Desktop hover overlay */}
+                <div className="absolute inset-0 hidden flex-col items-center justify-center gap-4 bg-background/80 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 md:flex">
                   <a
                     href={project.liveUrl}
                     target="_blank"
@@ -118,8 +115,18 @@ export function ProjectsSection() {
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {project.description}
                 </p>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {project.tags.map((tag) => (
+
+                {/* Category badge + tech tags */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  {PROJECT_CATEGORIES[project.id]?.map((cat) => (
+                    <span
+                      key={cat}
+                      className="rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary"
+                    >
+                      {cat}
+                    </span>
+                  ))}
+                  {project.tags.slice(0, 4).map((tag) => (
                     <span
                       key={tag}
                       className="rounded-md bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
@@ -127,6 +134,30 @@ export function ProjectsSection() {
                       {tag}
                     </span>
                   ))}
+                </div>
+
+                {/* Mobile action buttons */}
+                <div className="flex gap-2 pt-2 md:hidden">
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground"
+                    aria-label={`View live demo of ${project.title}`}
+                  >
+                    <ExternalLink size={13} />
+                    Live Demo
+                  </a>
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-secondary px-4 py-2 text-xs font-semibold text-secondary-foreground"
+                    aria-label={`View source code of ${project.title}`}
+                  >
+                    <Github size={13} />
+                    Source
+                  </a>
                 </div>
               </div>
             </motion.article>

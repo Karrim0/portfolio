@@ -43,30 +43,56 @@ export const portfolioData = {
   projects: [
     {
       id: 1,
-      title: "FourMap – Full-Stack Engineering Services Website with CMS",
+      title: "FreshCart – Full Featured E-commerce Platform",
       description:
-        "A complete PHP/MySQL website for FourMap, a Saudi engineering services company. Built with a dynamic admin panel that allows full content management — text, images, contact info, and social links — without touching the code. Includes marketing pages (Home, About, Services, Contact, Consultation) with WhatsApp integration and fully responsive RTL Arabic design.",
-      image: "/4map.png",
+        "A modern e-commerce web application built with React and Next.js. Features include product browsing, category and brand filtering, wishlist management, shopping cart functionality, authentication, and user profile management. Designed with a clean UI and fully responsive layout to provide a smooth shopping experience across all devices.",
+
+      image: "/freshcart.png",
+
       tags: [
         "React",
         "Next.js",
-        "Tailwind",
+        "TypeScript",
+        "Tailwind CSS",
+        "REST API",
+        "E-commerce",
+        "Product Filtering",
+        "Wishlist",
+        "Shopping Cart",
+        "Authentication",
+        "Responsive Design",
+      ],
+
+      liveUrl: "https://prime-cartt.vercel.app/",
+      githubUrl: "https://github.com/Karrim0/prime-cart",
+      featured: true,
+    },
+
+    {
+      id: 2,
+      title: "FourMap – Engineering Services Website with CMS",
+      description:
+        "A full-stack website developed for FourMap, a Saudi engineering services company. The platform includes a dynamic admin dashboard that allows managing content, images, contact information, and social media links without editing code. The website features multiple marketing pages, WhatsApp integration, and a fully responsive RTL Arabic interface.",
+
+      image: "/4map.png",
+
+      tags: [
         "PHP",
         "MySQL",
         "CMS",
-        "Admin Panel",
-        "RTL",
-        "Responsive",
+        "Admin Dashboard",
+        "Full Stack",
+        "Responsive Design",
+        "RTL Arabic",
         "WhatsApp Integration",
         "Dynamic Content",
-        "Full Stack",
       ],
-      liveUrl: "https://aaadosry.info/fourmap/",
+
+      liveUrl: "https://aaadosry.info/fourmap10/",
       githubUrl: "https://github.com/Karrim0/fourmap-website",
       featured: true,
     },
   ],
-
   experience: [
     {
       role: "Freelance Frontend Developer",

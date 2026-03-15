@@ -1,51 +1,78 @@
-"use client"
+"use client";
 
-import { motion, useInView } from "framer-motion"
-import { useRef, useState } from "react"
-import { Send, Github, Linkedin, Twitter, Mail } from "lucide-react"
-import emailjs from "@emailjs/browser"
-import { portfolioData } from "@/data/portfolio"
-import { SectionWrapper, SectionHeading } from "./section-wrapper"
+import { motion, useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  Send,
+  Github,
+  Linkedin,
+  Twitter,
+  Mail,
+  ArrowUpRight,
+} from "lucide-react";
+import emailjs from "@emailjs/browser";
+import { portfolioData } from "@/data/portfolio";
+import { SectionWrapper, SectionHeading } from "./section-wrapper";
 
-const EMAILJS_SERVICE_ID  = "service_n13gtdk"
-const EMAILJS_TEMPLATE_ID = "template_nf9ejta"
-const EMAILJS_PUBLIC_KEY  = "yDhIDrL00NYW2rN_l"
+const EMAILJS_SERVICE_ID = "service_n13gtdk";
+const EMAILJS_TEMPLATE_ID = "template_nf9ejta";
+const EMAILJS_PUBLIC_KEY = "yDhIDrL00NYW2rN_l";
 
 export function ContactSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const formRef = useRef<HTMLFormElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
+  const ref = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
+    "idle",
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!formRef.current) return
-
-    setStatus("sending")
-
+    e.preventDefault();
+    if (!formRef.current) return;
+    setStatus("sending");
     try {
       await emailjs.sendForm(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         formRef.current,
-        EMAILJS_PUBLIC_KEY
-      )
-      setStatus("sent")
-      formRef.current.reset()
-      setTimeout(() => setStatus("idle"), 4000)
+        EMAILJS_PUBLIC_KEY,
+      );
+      setStatus("sent");
+      formRef.current.reset();
+      setTimeout(() => setStatus("idle"), 4000);
     } catch (err) {
-      console.error(err)
-      setStatus("error")
-      setTimeout(() => setStatus("idle"), 4000)
+      console.error(err);
+      setStatus("error");
+      setTimeout(() => setStatus("idle"), 4000);
     }
-  }
+  };
 
   const socialLinks = [
-    { icon: Github,   href: portfolioData.social.github,              label: "GitHub" },
-    { icon: Linkedin, href: portfolioData.social.linkedin,            label: "LinkedIn" },
-    { icon: Twitter,  href: portfolioData.social.twitter,             label: "Twitter / X" },
-    { icon: Mail,     href: `mailto:${portfolioData.personal.email}`, label: portfolioData.personal.email },
-  ]
+    {
+      icon: Github,
+      href: portfolioData.social.github,
+      label: "GitHub",
+      handle: "Karrim0",
+    },
+    {
+      icon: Linkedin,
+      href: portfolioData.social.linkedin,
+      label: "LinkedIn",
+      handle: "karim74",
+    },
+    {
+      icon: Twitter,
+      href: portfolioData.social.twitter,
+      label: "Twitter / X",
+      handle: "kaghim_0",
+    },
+    {
+      icon: Mail,
+      href: `mailto:${portfolioData.personal.email}`,
+      label: "Email",
+      handle: portfolioData.personal.email,
+    },
+  ];
 
   return (
     <SectionWrapper id="contact" className="relative py-32">
@@ -54,8 +81,8 @@ export function ContactSection() {
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading label="05" title="Get In Touch" />
 
-        <div ref={ref} className="grid gap-16 lg:grid-cols-2">
-          {/* Left: Info */}
+        <div ref={ref} className="grid gap-12 lg:grid-cols-2">
+          {/* ── Left: info + social links ── */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -63,41 +90,64 @@ export function ContactSection() {
             className="flex flex-col gap-8"
           >
             <p className="text-base leading-relaxed text-muted-foreground md:text-lg">
-              {"I'm always open to new opportunities and interesting projects. Whether you have a question, a proposal, or just want to say hi - my inbox is always open."}
+              {
+                "I'm always open to new opportunities and interesting projects. Whether you have a question, a proposal, or just want to say hi — my inbox is always open."
+              }
             </p>
 
+            {/* Availability badge */}
             {portfolioData.personal.availableForWork && (
               <div className="flex items-center gap-3">
                 <span className="relative flex h-3 w-3">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                  <span className="relative inline-flex h-3 w-3 rounded-full bg-primary" />
                 </span>
-                <span className="text-sm font-medium text-foreground">Available for work</span>
+                <span className="text-sm font-medium text-foreground">
+                  Available for work
+                </span>
               </div>
             )}
 
-            <div className="flex flex-col gap-3">
-              {socialLinks.map((link) => {
-                const Icon = link.icon
+            {/* Social link cards — label + handle + arrow */}
+            <div className="flex flex-col gap-2">
+              {socialLinks.map((link, i) => {
+                const Icon = link.icon;
                 return (
-                  <a
+                  <motion.a
                     key={link.label}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-3 rounded-lg border border-border/50 bg-card px-4 py-3 transition-all hover:border-primary/30 hover:shadow-[0_0_30px_rgba(0,255,135,0.04)]"
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ duration: 0.4, delay: 0.3 + i * 0.08 }}
+                    className="group flex items-center justify-between rounded-lg border border-border/50 bg-card px-4 py-3 transition-all hover:border-primary/30 hover:shadow-[0_0_24px_rgba(0,255,135,0.04)]"
                   >
-                    <Icon size={16} className="text-muted-foreground transition-colors group-hover:text-primary" />
-                    <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
-                      {link.label}
-                    </span>
-                  </a>
-                )
+                    <div className="flex items-center gap-3">
+                      <Icon
+                        size={16}
+                        className="text-muted-foreground transition-colors group-hover:text-primary"
+                      />
+                      <div>
+                        <p className="text-xs font-medium text-foreground">
+                          {link.label}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {link.handle}
+                        </p>
+                      </div>
+                    </div>
+                    <ArrowUpRight
+                      size={14}
+                      className="text-muted-foreground/40 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary"
+                    />
+                  </motion.a>
+                );
               })}
             </div>
           </motion.div>
 
-          {/* Right: Form */}
+          {/* ── Right: form ── */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -109,7 +159,10 @@ export function ContactSection() {
               className="flex flex-col gap-5 rounded-xl border border-border/50 bg-card p-6"
             >
               <div className="flex flex-col gap-2">
-                <label htmlFor="name" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <label
+                  htmlFor="name"
+                  className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
+                >
                   Name
                 </label>
                 <input
@@ -123,7 +176,10 @@ export function ContactSection() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="email" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <label
+                  htmlFor="email"
+                  className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
+                >
                   Email
                 </label>
                 <input
@@ -137,7 +193,10 @@ export function ContactSection() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label htmlFor="message" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                <label
+                  htmlFor="message"
+                  className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
+                >
                   Message
                 </label>
                 <textarea
@@ -156,14 +215,18 @@ export function ContactSection() {
                 className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_30px_rgba(0,255,135,0.2)] disabled:opacity-60"
               >
                 {status === "sending" && "Sending..."}
-                {status === "sent"    && "Message Sent! ✓"}
-                {status === "error"   && "Failed, try again"}
-                {status === "idle"    && (<><Send size={14} /> Send Message</>)}
+                {status === "sent" && "Message Sent! ✓"}
+                {status === "error" && "Failed, try again"}
+                {status === "idle" && (
+                  <>
+                    <Send size={14} /> Send Message
+                  </>
+                )}
               </button>
             </form>
           </motion.div>
         </div>
       </div>
     </SectionWrapper>
-  )
+  );
 }

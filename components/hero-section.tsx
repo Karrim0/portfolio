@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ArrowDown, Download } from "lucide-react"
+import { Download } from "lucide-react"
 import { portfolioData } from "@/data/portfolio"
 import { TypewriterText } from "./typewriter"
 import { GridBackground } from "./grid-background"
@@ -26,7 +26,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex flex-col gap-6"
         >
-          {/* Greeting tag */}
+          {/* Role label — replaces "Hello, world" */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -34,8 +34,8 @@ export function HeroSection() {
             className="flex items-center gap-3"
           >
             <span className="h-px w-12 bg-primary" />
-            <span className="font-mono text-sm text-primary">
-              Hello, world
+            <span className="font-mono text-sm tracking-widest text-primary uppercase">
+              {personal.title}
             </span>
           </motion.div>
 
@@ -82,7 +82,6 @@ export function HeroSection() {
               className="group flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_30px_rgba(0,255,135,0.2)]"
             >
               View My Work
-              <ArrowDown size={16} className="transition-transform group-hover:translate-y-0.5" />
             </a>
             <a
               href={personal.cvLink}
@@ -91,23 +90,6 @@ export function HeroSection() {
               <Download size={16} />
               Download CV
             </a>
-          </motion.div>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-2"
-          >
-            <span className="text-xs text-muted-foreground">Scroll</span>
-            <div className="h-8 w-px bg-gradient-to-b from-primary/50 to-transparent" />
           </motion.div>
         </motion.div>
       </div>

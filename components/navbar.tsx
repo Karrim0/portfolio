@@ -45,13 +45,14 @@ export function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-background/80 backdrop-blur-xl border-b border-border"
+          ? "border-b border-border bg-background/80 backdrop-blur-xl"
           : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        {/* Logo */}
         <a
           href="#"
           className="font-mono text-sm font-bold tracking-wider text-primary"
@@ -60,29 +61,43 @@ export function Navbar() {
         </a>
 
         {/* Desktop nav */}
-        <ul className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <a
-                href={link.href}
-                className={`relative text-sm font-medium transition-colors duration-200 ${
-                  activeSection === link.href.replace("#", "")
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {link.label}
-                {activeSection === link.href.replace("#", "") && (
-                  <motion.span
-                    layoutId="active-nav"
-                    className="absolute -bottom-1 left-0 right-0 h-px bg-primary"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </a>
-            </li>
-          ))}
+        <ul className="hidden items-center gap-1 md:flex">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href.replace("#", "")
+            return (
+              <li key={link.href} className="relative">
+                <a
+                  href={link.href}
+                  className={`relative z-10 block rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
+                    isActive
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="active-nav-pill"
+                      className="absolute inset-0 rounded-md bg-primary/10"
+                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                      style={{ zIndex: -1 }}
+                    />
+                  )}
+                  {link.label}
+                </a>
+              </li>
+            )
+          })}
         </ul>
+
+        {/* Desktop CTA */}
+        <div className="hidden items-center gap-3 md:flex">
+          <a
+            href="#contact"
+            className="rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,255,135,0.15)]"
+          >
+            Hire Me
+          </a>
+        </div>
 
         {/* Mobile toggle */}
         <button
@@ -103,22 +118,34 @@ export function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden border-b border-border bg-background/95 backdrop-blur-xl md:hidden"
           >
-            <ul className="flex flex-col gap-4 px-6 py-6">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={`block text-sm font-medium transition-colors ${
-                      activeSection === link.href.replace("#", "")
-                        ? "text-primary"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+            <ul className="flex flex-col gap-1 px-6 py-4">
+              {navLinks.map((link) => {
+                const isActive = activeSection === link.href.replace("#", "")
+                return (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                        isActive
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                )
+              })}
+              <li className="pt-3">
+                <a
+                  href="#contact"
+                  onClick={() => setMobileOpen(false)}
+                  className="block rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground"
+                >
+                  Hire Me
+                </a>
+              </li>
             </ul>
           </motion.div>
         )}

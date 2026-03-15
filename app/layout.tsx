@@ -3,16 +3,17 @@ import { Space_Grotesk, Space_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { portfolioData } from "@/data/portfolio"
+import { CustomCursor } from "@/components/cursor"
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-sans",
 })
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
-  variable: "--font-space-mono",
+  variable: "--font-mono",
 })
 
 export const metadata: Metadata = {
@@ -49,8 +50,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${spaceMono.variable}`}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${spaceMono.variable} dark`}>
       <body className="font-sans antialiased">
+        <CustomCursor />
         {children}
         <Analytics />
       </body>
