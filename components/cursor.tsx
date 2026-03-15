@@ -7,9 +7,14 @@ export function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
     const dot = dotRef.current;
     const ring = ringRef.current;
     if (!dot || !ring) return;
+
+    dot.style.opacity = "1";
+    ring.style.opacity = "1";
 
     let mouseX = 0,
       mouseY = 0;
@@ -30,7 +35,6 @@ export function CustomCursor() {
       raf = requestAnimationFrame(animate);
     };
 
-    // Scale ring on hoverable elements
     const onEnter = () => ring.classList.add("cursor-hover");
     const onLeave = () => ring.classList.remove("cursor-hover");
 
@@ -50,21 +54,20 @@ export function CustomCursor() {
 
   return (
     <>
-      {/* Small solid dot — snaps instantly */}
       <div
         ref={dotRef}
         className="pointer-events-none fixed left-0 top-0 z-[9999] h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary"
-        style={{ willChange: "transform" }}
+        style={{ willChange: "transform", opacity: 0 }}
       />
-      {/* Larger ring — follows with lag */}
       <div
         ref={ringRef}
         className="cursor-ring pointer-events-none fixed left-0 top-0 z-[9998] h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/40 transition-[width,height,border-color] duration-200"
-        style={{ willChange: "transform" }}
+        style={{ willChange: "transform", opacity: 0 }}
       />
       <style>{`
-        body { cursor: none; }
-        a, button, [role="button"] { cursor: none; }
+        @media (pointer: fine) {
+          body, a, button, [role="button"] { cursor: none; }
+        }
         .cursor-ring.cursor-hover {
           width: 3rem;
           height: 3rem;
