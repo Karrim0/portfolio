@@ -2,33 +2,37 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Code2, Wrench, BookOpen } from "lucide-react";
+import { Code2, Wrench, Compass, Layers } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
 import { SectionWrapper, SectionHeading } from "./section-wrapper";
 
 const categories = [
   {
     key: "frontend" as const,
-    label: "Frontend",
+    label: "Core Frontend",
     icon: Code2,
-    description: "Core technologies I work with daily",
-    // green dot — primary stack
+    description: "Main technologies I use to build interfaces",
     dotClass: "bg-primary",
+  },
+  {
+    key: "frontendEngineering" as const,
+    label: "Frontend Engineering",
+    icon: Layers,
+    description: "How I structure and improve frontend work",
+    dotClass: "bg-emerald-400",
   },
   {
     key: "tools" as const,
     label: "Tools",
     icon: Wrench,
-    description: "My development toolkit",
-    // muted dot — supporting tools
+    description: "My development workflow and toolkit",
     dotClass: "bg-muted-foreground/50",
   },
   {
-    key: "learning" as const,
-    label: "Currently Learning",
-    icon: BookOpen,
-    description: "Expanding my skillset",
-    // purple dot — in progress
+    key: "exploring" as const,
+    label: "Currently Exploring",
+    icon: Compass,
+    description: "Technologies I’m expanding into",
     dotClass: "bg-violet-500",
   },
 ];
@@ -44,10 +48,10 @@ export function SkillsSection() {
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading label="02" title="Skills & Expertise" />
 
-        <div ref={ref} className="grid gap-8 md:grid-cols-3">
+        <div ref={ref} className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
           {categories.map((cat, catIndex) => {
             const Icon = cat.icon;
-            const skills = portfolioData.skills[cat.key];
+            const skills = portfolioData.skills[cat.key] ?? [];
 
             return (
               <motion.div
@@ -61,11 +65,11 @@ export function SkillsSection() {
                 }}
                 className="group rounded-xl border border-border/50 bg-card p-6 transition-all hover:border-primary/30 hover:shadow-[0_0_40px_rgba(0,255,135,0.05)]"
               >
-                {/* Card header */}
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
                     <Icon size={18} />
                   </div>
+
                   <div>
                     <h3 className="text-sm font-semibold">{cat.label}</h3>
                     <p className="text-xs text-muted-foreground">
@@ -74,7 +78,6 @@ export function SkillsSection() {
                   </div>
                 </div>
 
-                {/* Chips — replace proficiency dots */}
                 <div className="flex flex-wrap gap-2">
                   {skills.map((skill, skillIndex) => (
                     <motion.div
@@ -85,10 +88,9 @@ export function SkillsSection() {
                         duration: 0.3,
                         delay: catIndex * 0.15 + skillIndex * 0.06,
                       }}
-                      className="flex items-center gap-1.5 rounded-md border border-border/50 bg-secondary/60 px-2.5 py-1.5 text-xs text-foreground/80 transition-all hover:border-primary/30 hover:text-foreground"
-                    >
+className="flex items-center gap-1.5 whitespace-nowrap rounded-md border border-border/50 bg-secondary/60 px-2.5 py-1.5 text-xs text-foreground/80 transition-all hover:border-primary/30 hover:text-foreground"                    >
                       <span
-                        className={`h-1.5 w-1.5 rounded-full ${cat.dotClass} shrink-0`}
+                        className={`h-1.5 w-1.5 shrink-0 rounded-full ${cat.dotClass}`}
                       />
                       {skill}
                     </motion.div>
@@ -99,7 +101,6 @@ export function SkillsSection() {
           })}
         </div>
 
-        {/* Legend */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
@@ -110,13 +111,20 @@ export function SkillsSection() {
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             Core stack
           </div>
+
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            Frontend practices
+          </div>
+
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
             Tools & workflow
           </div>
+
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
-            Currently learning
+            Currently exploring
           </div>
         </motion.div>
       </div>

@@ -2,7 +2,7 @@ export const portfolioData = {
   personal: {
     name: "Kareem Mohamed",
     title: "Frontend Developer",
-    bio: "I build fast, beautiful, and accessible web experiences using React & Next.js.",
+    bio: "I build clean, responsive, and accessible web interfaces using React, Next.js, TypeScript, and Tailwind CSS — with a solid understanding of APIs, dashboards, and backend integration.",
     location: "Cairo, Egypt",
     email: "karimhnfy1@email.com",
     cvLink: "/cv.pdf",
@@ -16,113 +16,153 @@ export const portfolioData = {
     twitter: "https://twitter.com/kaghim_0",
   },
 
-  skills: {
-    frontend: [
+skills: {
+  frontend: [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "JavaScript (ES6+)",
+    "HTML5",
+    "CSS3",
+    "Tailwind CSS",
+    "Framer Motion",
+  ],
+
+  frontendEngineering: [
+    "Responsive Design",
+    "Accessibility",
+    "API Integration",
+    "State Management",
+    "Reusable Components",
+    "Performance Optimization",
+    "Clean UI Implementation",
+  ],
+
+  tools: [
+    "Git",
+    "GitHub",
+    "Figma",
+    "VS Code",
+    "Vercel",
+    "Postman",
+    "Chrome DevTools",
+  ],
+
+  exploring: ["Three.js", "Node.js", "GraphQL"],
+},
+
+  projects: [
+  {
+    id: 1,
+    title: "Kidorly – Multilingual Kids E-commerce Platform",
+    description:
+      "A production-quality kids e-commerce platform built from A to Z using Next.js, TypeScript, Prisma, PostgreSQL, Tailwind CSS, and shadcn/ui. The platform includes a multilingual public store with Arabic RTL, English, and German support, product catalog, filtering, cart system, guest checkout, payment options, WhatsApp order flow, SEO metadata, and a full admin dashboard for managing products, orders, categories, discounts, homepage content, settings, and media uploads.",
+
+    image: "/kidorly.png",
+
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Full Project",
+      "E-commerce",
+      "Admin Dashboard",
+      "RTL Arabic",
+      "i18n",
+      "SEO",
+    ],
+
+    liveUrl: "https://kidorly.vercel.app/",
+    githubUrl: "https://github.com/Karrim0/KIDORLY",
+    featured: true,
+  },
+
+  {
+    id: 2,
+    title: "FreshCart – E-commerce Frontend Platform",
+    description:
+      "A modern e-commerce frontend application built with React, Next.js, and TypeScript. It includes product browsing, category and brand filtering, wishlist management, shopping cart flow, authentication UI, and user profile pages. The project focuses on responsive layouts, clean component structure, API integration, and a smooth shopping experience across devices.",
+
+    image: "/freshcart.png",
+
+    tags: [
       "React",
       "Next.js",
       "TypeScript",
-      "JavaScript (ES6+)",
-      "HTML5",
-      "CSS3",
       "Tailwind CSS",
-      "Framer Motion",
+      "REST API",
+      "E-commerce",
+      "Product Filtering",
+      "Wishlist",
+      "Shopping Cart",
+      "Authentication UI",
+      "Responsive Design",
     ],
 
-    tools: [
-      "Git",
-      "GitHub",
-      "Figma",
-      "VS Code",
-      "Vercel",
-      "Postman",
-      "Chrome DevTools",
-    ],
-    learning: ["Three.js", "Node.js", "GraphQL"],
+    liveUrl: "https://prime-cartt.vercel.app/",
+    githubUrl: "https://github.com/Karrim0/prime-cart",
+    featured: true,
   },
 
-  projects: [
-    {
-      id: 1,
-      title: "FreshCart – Full Featured E-commerce Platform",
-      description:
-        "A modern e-commerce web application built with React and Next.js. Features include product browsing, category and brand filtering, wishlist management, shopping cart functionality, authentication, and user profile management. Designed with a clean UI and fully responsive layout to provide a smooth shopping experience across all devices.",
+  {
+    id: 3,
+    title: "FourMap – Full Project Website with CMS & Admin Dashboard",
+    description:
+      "A complete website developed from A to Z for FourMap, a Saudi engineering services company. I handled the frontend implementation, responsive RTL Arabic interface, custom CMS, admin dashboard, database structure, and backend logic for managing content, images, contact information, and social links. The project also includes multiple marketing pages, WhatsApp integration, and dynamic content management.",
 
-      image: "/freshcart.png",
+    image: "/4map.png",
 
-      tags: [
-        "React",
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS",
-        "REST API",
-        "E-commerce",
-        "Product Filtering",
-        "Wishlist",
-        "Shopping Cart",
-        "Authentication",
-        "Responsive Design",
-      ],
+    tags: [
+      "Full Project",
+      "Frontend Implementation",
+      "Responsive Design",
+      "RTL Arabic",
+      "CMS",
+      "Admin Dashboard",
+      "PHP",
+      "MySQL",
+      "Dynamic Content",
+      "WhatsApp Integration",
+    ],
 
-      liveUrl: "https://prime-cartt.vercel.app/",
-      githubUrl: "https://github.com/Karrim0/prime-cart",
-      featured: true,
-    },
-
-    {
-      id: 2,
-      title: "FourMap – Engineering Services Website with CMS",
-      description:
-        "A full-stack website developed for FourMap, a Saudi engineering services company. The platform includes a dynamic admin dashboard that allows managing content, images, contact information, and social media links without editing code. The website features multiple marketing pages, WhatsApp integration, and a fully responsive RTL Arabic interface.",
-
-      image: "/4map.png",
-
-      tags: [
-        "PHP",
-        "MySQL",
-        "CMS",
-        "Admin Dashboard",
-        "Full Stack",
-        "Responsive Design",
-        "RTL Arabic",
-        "WhatsApp Integration",
-        "Dynamic Content",
-      ],
-
-      liveUrl: "https://aaadosry.info/fourmap10/",
-      githubUrl: "https://github.com/Karrim0/fourmap-website",
-      featured: true,
-    },
-  ],
+    liveUrl: "https://aaadosry.info/fourmap10/",
+    githubUrl: "https://github.com/Karrim0/fourmap-website",
+    featured: true,
+  },
+],
   experience: [
-    {
-      role: "Freelance Frontend Developer",
-      company: "Self-Employed",
-      period: "Jun 2025 - Present",
-      description:
-        "Delivered multiple client projects including landing pages, service websites, and dynamic web applications. Focused on responsive UI, API integration, and performance optimization using React and Next.js.",
-      type: "freelance" as const,
-    },
-    {
-      role: "Frontend Developer (Personal Projects)",
-      company: "Independent",
-      period: "2025 ",
-      description:
-        "Built and maintained personal projects using React, Next.js, and TypeScript. Implemented state management with Redux Toolkit, React Query, and Context API. Focused on clean architecture and reusable components.",
-      type: "project" as const,
-    },
-    {
-      role: "Open Source & GitHub Projects",
-      company: "GitHub",
-      period: "2025 - Active",
-      description:
-        "Actively building and sharing projects on GitHub, exploring modern frontend patterns, performance optimization, and scalable component architecture.",
-      type: "project" as const,
-    },
-  ],
+  {
+    role: "Frontend Developer — Freelance Projects",
+    company: "Self-Employed",
+    period: "Jun 2025 - Present",
+    description:
+        "Built responsive websites, landing pages, and web application interfaces using React, Next.js, TypeScript, and Tailwind CSS. Worked on reusable components, API integration, performance optimization, and clean UI implementation.",
+    type: "freelance" as const,
+  },
+  {
+    role: "Frontend Developer — Personal Projects",
+    company: "Independent",
+    period: "2025",
+    description:
+      "Developed frontend projects focused on e-commerce flows, authentication UI, dashboards, state management, and responsive layouts. Used Redux Toolkit, React Query, and Context API to manage data and improve user experience.",
+    type: "project" as const,
+  },
+  {
+    role: "Open Source & GitHub Projects",
+    company: "GitHub",
+    period: "2025 - Active",
+    description:
+      "Building and sharing frontend projects on GitHub while improving React patterns, component architecture, accessibility, performance, and maintainable code structure.",
+    type: "project" as const,
+  },
+],
 
   funFacts: [
-    "I've shipped 5+ projects in my first year",
-    "Obsessed with clean code & pixel-perfect UI",
-    "Always learning something new in the frontend world",
-  ],
+  "Built responsive interfaces for e-commerce and service websites",
+  "Focused on clean components, reusable UI, and smooth user experience",
+  "Always improving my React, Next.js, and frontend engineering skills",
+],
 };

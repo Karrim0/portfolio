@@ -12,15 +12,16 @@ import { SectionWrapper, SectionHeading } from "./section-wrapper"
 const CATEGORIES = [
   { label: "All", value: null },
   { label: "Frontend", value: "Frontend" },
-  { label: "Full Stack", value: "Full Stack" },
-  { label: "Open Source", value: "Open Source" },
-]
+  { label: "Full Project", value: "Full Project" },
+  { label: "E-commerce", value: "E-commerce" },
+];
 
 // Maps each project id to its display category
 const PROJECT_CATEGORIES: Record<number, string[]> = {
-  1: ["Frontend"],
-  2: ["Full Stack"],
-}
+  1: ["Full Project", "E-commerce"],
+  2: ["Frontend", "E-commerce"],
+  3: ["Full Project"],
+};
 
 export function ProjectsSection() {
   const ref = useRef<HTMLDivElement>(null)
