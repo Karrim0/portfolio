@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import {
   Send,
   Github,
@@ -18,32 +18,58 @@ const EMAILJS_SERVICE_ID = "service_n13gtdk";
 const EMAILJS_TEMPLATE_ID = "template_nf9ejta";
 const EMAILJS_PUBLIC_KEY = "yDhIDrL00NYW2rN_l";
 
+type SubmitStatus = "idle" | "sending" | "sent" | "error";
+
+type EmailJSError = {
+  status?: number;
+  text?: string;
+  message?: string;
+};
+
 export function ContactSection() {
   const ref = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle",
-  );
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+
+  const resetStatus = () => {
+    window.setTimeout(() => {
+      setStatus("idle");
+    }, 4000);
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!formRef.current) return;
+
+    if (!formRef.current || status === "sending") return;
+
     setStatus("sending");
+
     try {
       await emailjs.sendForm(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         formRef.current,
-        EMAILJS_PUBLIC_KEY,
+        {
+          publicKey: EMAILJS_PUBLIC_KEY,
+        },
       );
+
       setStatus("sent");
       formRef.current.reset();
-      setTimeout(() => setStatus("idle"), 4000);
-    } catch (err) {
-      console.error(err);
+      resetStatus();
+    } catch (error: unknown) {
+      const err = error as EmailJSError;
+
+      console.warn("EmailJS failed:", {
+        status: err?.status,
+        text: err?.text,
+        message: err?.message,
+      });
+
       setStatus("error");
-      setTimeout(() => setStatus("idle"), 4000);
+      resetStatus();
     }
   };
 
@@ -82,7 +108,6 @@ export function ContactSection() {
         <SectionHeading label="05" title="Get In Touch" />
 
         <div ref={ref} className="grid gap-12 lg:grid-cols-2">
-          {/* ── Left: info + social links ── */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -95,23 +120,23 @@ export function ContactSection() {
               }
             </p>
 
-            {/* Availability badge */}
             {portfolioData.personal.availableForWork && (
               <div className="flex items-center gap-3">
                 <span className="relative flex h-3 w-3">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
                   <span className="relative inline-flex h-3 w-3 rounded-full bg-primary" />
                 </span>
+
                 <span className="text-sm font-medium text-foreground">
                   Available for work
                 </span>
               </div>
             )}
 
-            {/* Social link cards — label + handle + arrow */}
             <div className="flex flex-col gap-2">
               {socialLinks.map((link, i) => {
                 const Icon = link.icon;
+
                 return (
                   <motion.a
                     key={link.label}
@@ -128,6 +153,7 @@ export function ContactSection() {
                         size={16}
                         className="text-muted-foreground transition-colors group-hover:text-primary"
                       />
+
                       <div>
                         <p className="text-xs font-medium text-foreground">
                           {link.label}
@@ -137,6 +163,7 @@ export function ContactSection() {
                         </p>
                       </div>
                     </div>
+
                     <ArrowUpRight
                       size={14}
                       className="text-muted-foreground/40 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary"
@@ -147,47 +174,51 @@ export function ContactSection() {
             </div>
           </motion.div>
 
-          {/* ── Right: form ── */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <form
+              id="contact-form"
               ref={formRef}
               onSubmit={handleSubmit}
               className="flex flex-col gap-5 rounded-xl border border-border/50 bg-card p-6"
             >
               <div className="flex flex-col gap-2">
                 <label
-                  htmlFor="name"
+                  htmlFor="from_name"
                   className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
                 >
                   Name
                 </label>
+
                 <input
-                  id="name"
-                  name="name"
+                  id="from_name"
+                  name="from_name"
                   type="text"
                   required
                   placeholder="Your name"
+                  autoComplete="name"
                   className="rounded-lg border border-border bg-secondary px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-primary/50"
                 />
               </div>
 
               <div className="flex flex-col gap-2">
                 <label
-                  htmlFor="email"
+                  htmlFor="from_email"
                   className="text-xs font-medium uppercase tracking-wider text-muted-foreground"
                 >
                   Email
                 </label>
+
                 <input
-                  id="email"
-                  name="email"
+                  id="from_email"
+                  name="from_email"
                   type="email"
                   required
                   placeholder="your@email.com"
+                  autoComplete="email"
                   className="rounded-lg border border-border bg-secondary px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none transition-colors focus:border-primary/50"
                 />
               </div>
@@ -199,6 +230,7 @@ export function ContactSection() {
                 >
                   Message
                 </label>
+
                 <textarea
                   id="message"
                   name="message"
@@ -212,7 +244,7 @@ export function ContactSection() {
               <button
                 type="submit"
                 disabled={status === "sending" || status === "sent"}
-                className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_30px_rgba(0,255,135,0.2)] disabled:opacity-60"
+                className="flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_30px_rgba(0,255,135,0.2)] disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {status === "sending" && "Sending..."}
                 {status === "sent" && "Message Sent! ✓"}

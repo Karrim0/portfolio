@@ -1,26 +1,3 @@
-# Personal Portfolio
-
-A modern, responsive developer portfolio built with Next.js and TypeScript to showcase projects and technical skills.
-
-## 🚀 Tech Stack
-- Next.js
-- TypeScript
-- Tailwind CSS
-- Vercel Deployment
-
-## ✨ Features
-- Responsive design
-- Dark theme UI
-- Project showcase section
-- Optimized performance
-- Clean component architecture
-
-## 🌍 Live Demo
-https://kaghim.vercel.app/
-
----
-
-Designed with focus on performance, scalability, and clean UI structure.
 
 ```
 PORTFOLIO
@@ -28,7 +5,9 @@ PORTFOLIO
 │  ├─ globals.css
 │  ├─ layout.tsx
 │  ├─ not-found.tsx
-│  └─ page.tsx
+│  ├─ page.tsx
+│  ├─ robots.ts
+│  └─ sitemap.ts
 ├─ assets
 │  └─ 01.png
 ├─ components
@@ -123,6 +102,7 @@ PORTFOLIO
 │  ├─ 4map.png
 │  ├─ 4map2.png
 │  ├─ freshcart.png
+│  ├─ google3900e5f194e22df3.html
 │  ├─ kidorly.png
 │  └─ og.png
 ├─ README.md

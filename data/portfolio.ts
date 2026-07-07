@@ -4,17 +4,19 @@ export const portfolioData = {
     title: "Frontend Developer",
     bio: "I build clean, responsive, and accessible web interfaces using React, Next.js, TypeScript, and Tailwind CSS — with a solid understanding of APIs, dashboards, and backend integration.",
     location: "Cairo, Egypt",
-    email: "karimhnfy1@email.com",
+    email: "karimhnfy1@gmail.com",
     cvLink: "/cv.pdf",
     photo: "/01.png",
     availableForWork: true,
   },
 
   social: {
-    github: "https://github.com/Karrim0",
-    linkedin: "https://www.linkedin.com/in/karim74/",
-    twitter: "https://twitter.com/kaghim_0",
-  },
+  github: "https://github.com/Karrim0",
+  linkedin: "https://www.linkedin.com/in/karim74/",
+  twitter: "https://twitter.com/kaghim_0",
+  facebook: "https://www.facebook.com/kareem.mohmmed.9279/",
+  instagram: "https://www.instagram.com/kaghim_0/",
+},
 
 skills: {
   frontend: [

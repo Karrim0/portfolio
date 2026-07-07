@@ -31,6 +31,7 @@ export const metadata: Metadata = {
     "Karim Mohamed",
     "Karim Hanafy",
     "Kareem Hanafy",
+    "Kaghim",
     "Frontend Developer",
     "React Developer",
     "Next.js Developer",
@@ -122,10 +123,12 @@ function PersonJsonLd() {
         "Performance Optimization",
       ],
       sameAs: [
-        portfolioData.social.github,
-        portfolioData.social.linkedin,
-        portfolioData.social.twitter,
-      ],
+  portfolioData.social.github,
+  portfolioData.social.linkedin,
+  portfolioData.social.twitter,
+  portfolioData.social.facebook,
+  portfolioData.social.instagram,
+],
     },
   };
 
