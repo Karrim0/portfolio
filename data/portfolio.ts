@@ -1,11 +1,11 @@
 export const portfolioData = {
   personal: {
-    name: "Kareem Mohamed",
+    name: "Kareem Hanafy",
     title: "Frontend Developer",
     bio: "I build clean, responsive, and accessible web interfaces using React, Next.js, TypeScript, and Tailwind CSS — with a solid understanding of APIs, dashboards, and backend integration.",
     location: "Cairo, Egypt",
     email: "karimhnfy1@gmail.com",
-    cvLink: "/cv.pdf",
+    cvLink: "/Kareem_Hanafy_Frontend_Engineer_CV.pdf",
     photo: "/01.png",
     availableForWork: true,
   },
@@ -53,12 +53,12 @@ skills: {
   exploring: ["Three.js", "Node.js", "GraphQL"],
 },
 
-  projects: [
+projects: [
   {
     id: 1,
-    title: "Kidorly – Multilingual Kids E-commerce Platform",
+    title: "Kidorly – Full-Stack Multilingual E-commerce Platform",
     description:
-      "A production-quality kids e-commerce platform built from A to Z using Next.js, TypeScript, Prisma, PostgreSQL, Tailwind CSS, and shadcn/ui. The platform includes a multilingual public store with Arabic RTL, English, and German support, product catalog, filtering, cart system, guest checkout, payment options, WhatsApp order flow, SEO metadata, and a full admin dashboard for managing products, orders, categories, discounts, homepage content, settings, and media uploads.",
+      "A production-ready full-stack e-commerce platform built from scratch using Next.js, TypeScript, Prisma, PostgreSQL, Tailwind CSS, and shadcn/ui. The platform features a multilingual storefront (Arabic RTL, English, and German), product catalog, filtering, cart, checkout, local payment options, WhatsApp ordering, SEO optimization, and a complete admin dashboard for managing products, categories, brands, orders, homepage sections, media, discounts, shipping, and store settings.",
 
     image: "/kidorly.png",
 
@@ -69,10 +69,10 @@ skills: {
       "PostgreSQL",
       "Tailwind CSS",
       "shadcn/ui",
-      "Full Project",
+      "Full-Stack",
       "E-commerce",
       "Admin Dashboard",
-      "RTL Arabic",
+      "RTL",
       "i18n",
       "SEO",
     ],
@@ -84,24 +84,80 @@ skills: {
 
   {
     id: 2,
-    title: "FreshCart – E-commerce Frontend Platform",
+    title: "Menoufia University Portal – Multilingual University Platform",
     description:
-      "A modern e-commerce frontend application built with React, Next.js, and TypeScript. It includes product browsing, category and brand filtering, wishlist management, shopping cart flow, authentication UI, and user profile pages. The project focuses on responsive layouts, clean component structure, API integration, and a smooth shopping experience across devices.",
+      "A large-scale multilingual university portal rebuilt using React, Vite, TypeScript, JavaScript, i18next, and REST APIs. The project transformed an expatriates-focused portal into a complete university platform featuring dynamic news, faculties, departments, university sectors, special units, general administrations, global search, multilingual support, RTL/LTR layouts, theme palettes, responsive design, and centralized API integration.",
 
-    image: "/freshcart.png",
+    image: "/portal.png",
 
     tags: [
       "React",
-      "Next.js",
+      "Vite",
       "TypeScript",
+      "JavaScript",
+      "REST API",
+      "i18next",
+      "University Portal",
+      "Multilingual",
+      "RTL",
+      "Dynamic Routing",
+      "Theme System",
+      "Responsive",
+    ],
+
+    liveUrl: "https://stage.menofia.edu.eg/",
+    githubUrl: "https://github.com/Karrim0/Menoufia-University-Portal",
+    featured: true,
+  },
+
+  {
+    id: 3,
+    title: "FourMap – Business Website with CMS & Admin Dashboard",
+    description:
+      "A complete business website developed for a Saudi engineering services company using PHP and MySQL. The project includes a responsive RTL Arabic interface, custom CMS, admin dashboard, content management, services, articles, SEO settings, image uploads, contact management, WhatsApp integration, and backend logic for managing dynamic website content.",
+
+    image: "/4map.png",
+
+    tags: [
+      "PHP",
+      "MySQL",
+      "CMS",
+      "Admin Dashboard",
+      "RTL",
+      "Responsive",
+      "SEO",
+      "Business Website",
+      "Dynamic Content",
+      "WhatsApp",
+      "Client Project",
+    ],
+
+    liveUrl: "https://kaghim.wuaze.com/",
+    githubUrl: "https://github.com/Karrim0/fourmap-website",
+    featured: true,
+  },
+
+  {
+    id: 4,
+    title: "Prime Cart – E-commerce Frontend Platform",
+    description:
+      "A modern e-commerce frontend built with React, TypeScript, Vite, Tailwind CSS, and real REST APIs. The application includes authentication, product browsing, categories, brands, shopping cart, wishlist, checkout flow, user profile, order history, reusable UI components, custom hooks, loading states, and a responsive shopping experience across all devices.",
+
+    image: "/primecart.png",
+
+    tags: [
+      "React",
+      "TypeScript",
+      "Vite",
       "Tailwind CSS",
       "REST API",
       "E-commerce",
-      "Product Filtering",
+      "Authentication",
       "Wishlist",
       "Shopping Cart",
-      "Authentication UI",
-      "Responsive Design",
+      "Checkout",
+      "Responsive",
+      "Frontend",
     ],
 
     liveUrl: "https://prime-cartt.vercel.app/",
@@ -110,28 +166,29 @@ skills: {
   },
 
   {
-    id: 3,
-    title: "FourMap – Full Project Website with CMS & Admin Dashboard",
+    id: 5,
+    title: "MFM Egypt – Marketing & Media Website",
     description:
-      "A complete website developed from A to Z for FourMap, a Saudi engineering services company. I handled the frontend implementation, responsive RTL Arabic interface, custom CMS, admin dashboard, database structure, and backend logic for managing content, images, contact information, and social links. The project also includes multiple marketing pages, WhatsApp integration, and dynamic content management.",
+      "A responsive corporate website developed for a marketing and media company using React, TypeScript, Vite, and modern frontend practices. The platform showcases company services, events, galleries, white papers, media monitoring, influencers marketing, client showcases, and promotional content with an optimized responsive user experience.",
 
-    image: "/4map.png",
+    image: "/mfm.png",
 
     tags: [
-      "Full Project",
-      "Frontend Implementation",
-      "Responsive Design",
-      "RTL Arabic",
-      "CMS",
-      "Admin Dashboard",
-      "PHP",
-      "MySQL",
-      "Dynamic Content",
-      "WhatsApp Integration",
+      "React",
+      "TypeScript",
+      "Vite",
+      "Marketing",
+      "Corporate Website",
+      "Responsive",
+      "Media",
+      "Events",
+      "Gallery",
+      "White Papers",
+      "Frontend",
     ],
 
-    liveUrl: "https://aaadosry.info/fourmap10/",
-    githubUrl: "https://github.com/Karrim0/fourmap-website",
+    liveUrl: "https://mfm-bice.vercel.app/",
+    githubUrl: "https://github.com/Karrim0/mfm-egypt",
     featured: true,
   },
 ],
