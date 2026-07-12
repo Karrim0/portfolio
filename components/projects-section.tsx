@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import Image from "next/image";
-import { ExternalLink, Github, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
 import { SectionWrapper, SectionHeading } from "./section-wrapper";
 
@@ -33,7 +33,9 @@ function getProjectCategories(project: Project) {
 export function ProjectsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   const filteredProjects = useMemo(() => {
     if (!activeCategory) return portfolioData.projects;
@@ -43,14 +45,34 @@ export function ProjectsSection() {
     );
   }, [activeCategory]);
 
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedProject(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [selectedProject]);
+
   return (
     <SectionWrapper id="projects" className="relative py-32">
       <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
 
-<div className="mx-auto max-w-6xl px-6">
-          <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading label="03" title="Projects" />
-          
+
           <div className="flex flex-wrap gap-2 lg:justify-end">
             {CATEGORIES.map((category) => {
               const isActive = activeCategory === category.value;
@@ -60,6 +82,7 @@ export function ProjectsSection() {
                   key={category.label}
                   type="button"
                   onClick={() => setActiveCategory(category.value)}
+                  aria-pressed={isActive}
                   className={`rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition-all ${
                     isActive
                       ? "bg-primary text-primary-foreground shadow-[0_0_24px_rgba(0,255,135,0.18)]"
@@ -73,10 +96,7 @@ export function ProjectsSection() {
           </div>
         </div>
 
-       <div
-  ref={ref}
-  className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
->
+        <div ref={ref} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project, index) => {
             const categories = getProjectCategories(project);
             const hasLiveUrl = Boolean(project.liveUrl);
@@ -105,16 +125,15 @@ export function ProjectsSection() {
                     alt={project.title}
                     fill
                     className="object-cover transition duration-700 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
 
-                  <div className="absolute left-3 top-3 flex items-center gap-2">
+                  <div className="absolute left-3 top-3">
                     <span className="rounded-full border border-primary/30 bg-background/75 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-primary backdrop-blur">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-
                   </div>
 
                   <div className="absolute bottom-3 right-3 flex gap-2">
@@ -167,9 +186,17 @@ export function ProjectsSection() {
                     />
                   </div>
 
-                  <p className="mb-4 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
+                  <p className="mb-3 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
                     {project.description}
                   </p>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedProject(project)}
+                    className="mb-4 w-fit text-[11px] font-semibold text-primary transition hover:translate-x-0.5 hover:underline"
+                  >
+                    View details
+                  </button>
 
                   <div className="mb-4 flex flex-wrap gap-1.5">
                     {project.tags.slice(0, 4).map((tag) => (
@@ -219,6 +246,112 @@ export function ProjectsSection() {
           </div>
         )}
       </div>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 px-4 py-6 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedProject(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 28, scale: 0.96 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              onClick={(event) => event.stopPropagation()}
+              className="relative flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[0_0_90px_rgba(0,255,135,0.1)]"
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedProject(null)}
+                className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/80 text-muted-foreground backdrop-blur transition hover:border-primary/40 hover:text-primary"
+                aria-label="Close project details"
+              >
+                <X size={16} />
+              </button>
+
+              <div className="relative aspect-[16/8] min-h-[220px] overflow-hidden bg-secondary">
+                <Image
+                  src={selectedProject.image}
+                  alt={selectedProject.title}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+
+                <div className="absolute bottom-5 left-5 right-16">
+                  <div className="mb-3 flex flex-wrap gap-2">
+                    {getProjectCategories(selectedProject).map((category) => (
+                      <span
+                        key={category}
+                        className="rounded-full border border-primary/20 bg-primary/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary backdrop-blur"
+                      >
+                        {category}
+                      </span>
+                    ))}
+                  </div>
+
+                  <h3 className="max-w-3xl text-2xl font-bold leading-tight text-foreground md:text-3xl">
+                    {selectedProject.title}
+                  </h3>
+                </div>
+              </div>
+
+              <div className="overflow-y-auto p-5 md:p-6">
+                <p className="mb-6 whitespace-pre-line text-sm leading-7 text-muted-foreground">
+                  {selectedProject.description}
+                </p>
+
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {selectedProject.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-md border border-border/50 bg-secondary/70 px-2.5 py-1 text-[11px] font-medium text-muted-foreground"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <a
+                    href={selectedProject.liveUrl || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-xs font-semibold text-primary-foreground transition hover:brightness-110 ${
+                      !selectedProject.liveUrl
+                        ? "pointer-events-none opacity-40"
+                        : ""
+                    }`}
+                  >
+                    <ExternalLink size={14} />
+                    Live Demo
+                  </a>
+
+                  <a
+                    href={selectedProject.githubUrl || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`flex items-center justify-center gap-2 rounded-lg border border-border bg-secondary px-4 py-3 text-xs font-semibold text-secondary-foreground transition hover:border-primary/40 hover:text-primary ${
+                      !selectedProject.githubUrl
+                        ? "pointer-events-none opacity-40"
+                        : ""
+                    }`}
+                  >
+                    <Github size={14} />
+                    Source Code
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </SectionWrapper>
   );
 }
