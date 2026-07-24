@@ -1,357 +1,182 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion, useInView } from "framer-motion";
-import Image from "next/image";
-import { ArrowUpRight, ExternalLink, Github, X } from "lucide-react";
-import { portfolioData } from "@/data/portfolio";
-import { SectionWrapper, SectionHeading } from "./section-wrapper";
-
-const CATEGORIES = [
-  { label: "All", value: null },
-  { label: "Full Project", value: "Full Project" },
-  { label: "Frontend", value: "Frontend" },
-  { label: "E-commerce", value: "E-commerce" },
-  { label: "Dashboard", value: "Dashboard" },
-  { label: "Client Work", value: "Client Work" },
-];
-
-type Project = (typeof portfolioData.projects)[number];
-
-const PROJECT_CATEGORIES: Record<number, string[]> = {
-  1: ["Full Project", "E-commerce", "Dashboard"],
-  2: ["Frontend"],
-  3: ["Full Project", "Dashboard", "Client Work"],
-  4: ["Frontend", "E-commerce"],
-  5: ["Frontend", "Client Work"],
-};
-
-function getProjectCategories(project: Project) {
-  return PROJECT_CATEGORIES[project.id] ?? ["Frontend"];
-}
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Download, ExternalLink, Github } from "lucide-react";
+import { useRef, type CSSProperties, type ReactNode } from "react";
+import { portfolioData, type PortfolioProject, type ProjectLinkKind } from "@/data/portfolio";
+import { ProjectGallery } from "./project-gallery";
+import { ProjectVisual } from "./project-visual";
+import { SectionHeading, SectionWrapper } from "./section-wrapper";
+import { GymCrewSpotlight } from "./gym-crew-spotlight";
 
 export function ProjectsSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  const filteredProjects = useMemo(() => {
-    if (!activeCategory) return portfolioData.projects;
-
-    return portfolioData.projects.filter((project) =>
-      getProjectCategories(project).includes(activeCategory),
-    );
-  }, [activeCategory]);
-
-  useEffect(() => {
-    if (!selectedProject) return;
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setSelectedProject(null);
-      }
-    };
-
-    window.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, [selectedProject]);
+  const featuredProjects = portfolioData.projects.filter((project) => project.featured);
+  const gymCrewProject = portfolioData.projects.find((project) => project.id === "gym-crew");
+  const selectedProjects = portfolioData.projects.filter((project) => !project.featured && project.id !== "gym-crew");
 
   return (
-    <SectionWrapper id="projects" className="relative py-32">
-      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/25 to-transparent" />
+    <SectionWrapper id="work" className="section-block section-block-work">
+      <div className="page-shell">
+        <SectionHeading
+          index="01"
+          eyebrow="Selected web work"
+          title="Three projects that show how I handle real web product complexity."
+          description="The featured work focuses on the responsibilities a technical team actually evaluates: frontend architecture, API and data flows, business operations, multilingual UX, maintainability, and delivery."
+        />
 
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <SectionHeading label="03" title="Projects" />
-
-          <div className="flex flex-wrap gap-2 lg:justify-end">
-            {CATEGORIES.map((category) => {
-              const isActive = activeCategory === category.value;
-
-              return (
-                <button
-                  key={category.label}
-                  type="button"
-                  onClick={() => setActiveCategory(category.value)}
-                  aria-pressed={isActive}
-                  className={`rounded-full px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] transition-all ${
-                    isActive
-                      ? "bg-primary text-primary-foreground shadow-[0_0_24px_rgba(0,255,135,0.18)]"
-                      : "border border-border/60 bg-card/70 text-muted-foreground hover:border-primary/40 hover:text-foreground"
-                  }`}
-                >
-                  {category.label}
-                </button>
-              );
-            })}
-          </div>
+        <div className="featured-projects">
+          {featuredProjects.map((project, index) => (
+            <FeaturedProject key={project.id} project={project} index={index} />
+          ))}
         </div>
 
-        <div ref={ref} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project, index) => {
-            const categories = getProjectCategories(project);
-            const hasLiveUrl = Boolean(project.liveUrl);
-            const hasGithubUrl = Boolean(project.githubUrl);
+        {gymCrewProject ? <GymCrewSpotlight project={gymCrewProject} /> : null}
 
-            return (
-              <motion.article
-                key={project.id}
-                initial={{ opacity: 0, y: 28 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.08,
-                  ease: "easeOut",
-                }}
-                className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/50 bg-card/70 shadow-[0_18px_70px_rgba(0,0,0,0.22)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_0_60px_rgba(0,255,135,0.09)]"
-              >
-                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent" />
-                  <div className="absolute -right-20 -top-20 h-44 w-44 rounded-full bg-primary/10 blur-3xl" />
-                </div>
-
-                <div className="relative aspect-[16/9] overflow-hidden bg-secondary">
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-
-                  <div className="absolute left-3 top-3">
-                    <span className="rounded-full border border-primary/30 bg-background/75 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-primary backdrop-blur">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  <div className="absolute bottom-3 right-3 flex gap-2">
-                    <a
-                      href={hasLiveUrl ? project.liveUrl : "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex h-9 w-9 items-center justify-center rounded-full border border-primary/30 bg-background/80 text-primary backdrop-blur transition hover:bg-primary hover:text-primary-foreground ${
-                        !hasLiveUrl ? "pointer-events-none opacity-40" : ""
-                      }`}
-                      aria-label={`View live demo of ${project.title}`}
-                    >
-                      <ExternalLink size={14} />
-                    </a>
-
-                    <a
-                      href={hasGithubUrl ? project.githubUrl : "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-background/80 text-foreground backdrop-blur transition hover:border-primary/40 hover:text-primary ${
-                        !hasGithubUrl ? "pointer-events-none opacity-40" : ""
-                      }`}
-                      aria-label={`View source code of ${project.title}`}
-                    >
-                      <Github size={14} />
-                    </a>
-                  </div>
-                </div>
-
-                <div className="relative flex flex-1 flex-col p-4">
-                  <div className="mb-2 flex flex-wrap gap-1.5">
-                    {categories.slice(0, 2).map((category) => (
-                      <span
-                        key={category}
-                        className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-semibold text-primary"
-                      >
-                        {category}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mb-2 flex items-start justify-between gap-3">
-                    <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-primary">
-                      {project.title}
-                    </h3>
-
-                    <ArrowUpRight
-                      size={16}
-                      className="mt-0.5 shrink-0 text-muted-foreground/45 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
-                    />
-                  </div>
-
-                  <p className="mb-3 line-clamp-3 text-xs leading-relaxed text-muted-foreground">
-                    {project.description}
-                  </p>
-
-                  <button
-                    type="button"
-                    onClick={() => setSelectedProject(project)}
-                    className="mb-4 w-fit text-[11px] font-semibold text-primary transition hover:translate-x-0.5 hover:underline"
-                  >
-                    View details
-                  </button>
-
-                  <div className="mb-4 flex flex-wrap gap-1.5">
-                    {project.tags.slice(0, 4).map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-md border border-border/50 bg-secondary/70 px-2 py-0.5 text-[9px] font-medium text-muted-foreground"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto grid grid-cols-2 gap-2">
-                    <a
-                      href={hasLiveUrl ? project.liveUrl : "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-[11px] font-semibold text-primary-foreground transition hover:brightness-110 hover:shadow-[0_0_24px_rgba(0,255,135,0.18)] ${
-                        !hasLiveUrl ? "pointer-events-none opacity-40" : ""
-                      }`}
-                    >
-                      <ExternalLink size={12} />
-                      Live
-                    </a>
-
-                    <a
-                      href={hasGithubUrl ? project.githubUrl : "#"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex items-center justify-center gap-1.5 rounded-lg border border-border bg-secondary px-3 py-2 text-[11px] font-semibold text-secondary-foreground transition hover:border-primary/40 hover:text-primary ${
-                        !hasGithubUrl ? "pointer-events-none opacity-40" : ""
-                      }`}
-                    >
-                      <Github size={12} />
-                      Code
-                    </a>
-                  </div>
-                </div>
-              </motion.article>
-            );
-          })}
+        <div className="selected-work-heading">
+          <div>
+            <span>MORE SELECTED WEB WORK</span>
+            <h3>Client improvements and product builds across different business contexts.</h3>
+          </div>
+          <p>
+            These supporting projects show how I improve existing interfaces, work inside established codebases,
+            and build focused web products around real content and operational needs.
+          </p>
         </div>
 
-        {filteredProjects.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-border/50 bg-card/60 p-8 text-center text-sm text-muted-foreground">
-            No projects found in this category.
-          </div>
-        )}
+        <div className="selected-project-grid">
+          {selectedProjects.map((project, index) => (
+            <SelectedProject key={project.id} project={project} index={index} />
+          ))}
+        </div>
+      </div>
+    </SectionWrapper>
+  );
+}
+
+function FeaturedProject({ project, index }: { project: PortfolioProject; index: number }) {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-90px" });
+  const reduceMotion = useReducedMotion();
+  const reverse = index % 2 === 1;
+
+  return (
+    <motion.article
+      ref={ref}
+      initial={reduceMotion ? false : { opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+      className={`featured-project ${reverse ? "featured-project-reverse" : ""}`}
+    >
+      <div className="featured-project-visual">
+        <ProjectGallery project={project} />
+        <div className="visual-caption">
+          <span>{project.status}</span>
+          <span>{project.category}</span>
+        </div>
       </div>
 
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 px-4 py-6 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProject(null)}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 28, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 28, scale: 0.96 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              onClick={(event) => event.stopPropagation()}
-              className="relative flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-[0_0_90px_rgba(0,255,135,0.1)]"
-            >
-              <button
-                type="button"
-                onClick={() => setSelectedProject(null)}
-                className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background/80 text-muted-foreground backdrop-blur transition hover:border-primary/40 hover:text-primary"
-                aria-label="Close project details"
-              >
-                <X size={16} />
-              </button>
+      <div className="featured-project-copy">
+        <div className="project-number">0{index + 1}</div>
+        <div className="project-meta-line">
+          <span>{project.category}</span>
+          <span>{project.status}</span>
+        </div>
+        <h3>{project.title}</h3>
+        <p className="project-description">{project.description}</p>
 
-              <div className="relative aspect-[16/8] min-h-[220px] overflow-hidden bg-secondary">
-                <Image
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  fill
-                  className="object-cover"
-                  sizes="100vw"
-                />
+        <div className="project-responsibility">
+          <span>My role</span>
+          <p>{project.role}</p>
+        </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+        <div className="project-story-grid">
+          <div>
+            <span>Challenge</span>
+            <p>{project.challenge}</p>
+          </div>
+          <div>
+            <span>Outcome</span>
+            <p>{project.outcome}</p>
+          </div>
+        </div>
 
-                <div className="absolute bottom-5 left-5 right-16">
-                  <div className="mb-3 flex flex-wrap gap-2">
-                    {getProjectCategories(selectedProject).map((category) => (
-                      <span
-                        key={category}
-                        className="rounded-full border border-primary/20 bg-primary/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary backdrop-blur"
-                      >
-                        {category}
-                      </span>
-                    ))}
-                  </div>
+        <div className="project-tags">
+          {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
+        </div>
 
-                  <h3 className="max-w-3xl text-2xl font-bold leading-tight text-foreground md:text-3xl">
-                    {selectedProject.title}
-                  </h3>
-                </div>
-              </div>
+        <ProjectLinks project={project} />
+      </div>
+    </motion.article>
+  );
+}
 
-              <div className="overflow-y-auto p-5 md:p-6">
-                <p className="mb-6 whitespace-pre-line text-sm leading-7 text-muted-foreground">
-                  {selectedProject.description}
-                </p>
+function SelectedProject({ project, index }: { project: PortfolioProject; index: number }) {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-70px" });
+  const reduceMotion = useReducedMotion();
+  const style = { "--card-index": index } as CSSProperties;
 
-                <div className="mb-6 flex flex-wrap gap-2">
-                  {selectedProject.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-md border border-border/50 bg-secondary/70 px-2.5 py-1 text-[11px] font-medium text-muted-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+  return (
+    <motion.article
+      ref={ref}
+      style={style}
+      initial={reduceMotion ? false : { opacity: 0, y: 22 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 22 }}
+      transition={{ duration: 0.6, delay: reduceMotion ? 0 : index * 0.05 }}
+      className={`selected-project-card ${project.mobileExtension ? "selected-project-card-mobile" : ""}`}
+    >
+      <div className="selected-project-image">
+        <ProjectVisual project={project} />
+      </div>
+      <div className="selected-project-body">
+        <div className="project-meta-line">
+          <span>{project.category}</span>
+          <span>{project.status}</span>
+        </div>
+        <h3>{project.title}</h3>
+        <p>{project.description}</p>
+        <div className="selected-project-footer">
+          <div className="project-tags compact">
+            {project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}
+          </div>
+          <ProjectLinks project={project} compact />
+        </div>
+      </div>
+    </motion.article>
+  );
+}
 
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <a
-                    href={selectedProject.liveUrl || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-xs font-semibold text-primary-foreground transition hover:brightness-110 ${
-                      !selectedProject.liveUrl
-                        ? "pointer-events-none opacity-40"
-                        : ""
-                    }`}
-                  >
-                    <ExternalLink size={14} />
-                    Live Demo
-                  </a>
+function linkIcon(kind: ProjectLinkKind, compact: boolean): ReactNode {
+  const size = compact ? 16 : 15;
+  if (kind === "github") return <Github size={size} />;
+  if (kind === "download") return <Download size={size} />;
+  return compact ? <ExternalLink size={size} /> : <ArrowUpRight size={16} />;
+}
 
-                  <a
-                    href={selectedProject.githubUrl || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center justify-center gap-2 rounded-lg border border-border bg-secondary px-4 py-3 text-xs font-semibold text-secondary-foreground transition hover:border-primary/40 hover:text-primary ${
-                      !selectedProject.githubUrl
-                        ? "pointer-events-none opacity-40"
-                        : ""
-                    }`}
-                  >
-                    <Github size={14} />
-                    Source Code
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </SectionWrapper>
+function ProjectLinks({ project, compact = false }: { project: PortfolioProject; compact?: boolean }) {
+  if (!project.links.length) return null;
+
+  return (
+    <div className={`project-links ${compact ? "project-links-compact" : ""}`}>
+      {project.links.map((link, index) => (
+        <a
+          key={`${project.id}-${link.label}`}
+          href={link.href}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`${link.label} — ${project.title}`}
+          title={compact ? link.label : undefined}
+          className={index === 0 ? "project-link-primary" : ""}
+        >
+          {compact ? linkIcon(link.kind, true) : (
+            <>
+              {link.kind !== "live" ? linkIcon(link.kind, false) : null}
+              {link.label}
+              {link.kind === "live" ? linkIcon(link.kind, false) : null}
+            </>
+          )}
+        </a>
+      ))}
+    </div>
   );
 }

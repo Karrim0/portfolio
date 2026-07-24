@@ -1,155 +1,237 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Menu, X } from "lucide-react"
-import { portfolioData } from "@/data/portfolio"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { portfolioData } from "@/data/portfolio";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
-]
+  { label: "Work", href: "#work", id: "work" },
+  { label: "Capabilities", href: "#capabilities", id: "capabilities" },
+  { label: "Experience", href: "#experience", id: "experience" },
+  { label: "About", href: "#about", id: "about" },
+  { label: "Contact", href: "#contact", id: "contact" },
+] as const;
+
+type NavigationTarget = "hero" | (typeof navLinks)[number]["id"];
+
+type NavigationLock = {
+  id: NavigationTarget;
+  expiresAt: number;
+};
+
+function TechnicalArrow() {
+  return (
+    <span className="technical-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false">
+        <circle className="technical-arrow-node" cx="5" cy="19" r="1.25" />
+        <path className="technical-arrow-line" d="M6.5 17.5 18.5 5.5" />
+        <path className="technical-arrow-head" d="M10.5 5.5h8v8" />
+      </svg>
+    </span>
+  );
+}
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState("")
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState<NavigationTarget>("hero");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const navigationLock = useRef<NavigationLock | null>(null);
+  const animationFrame = useRef<number | null>(null);
+  const reduceMotion = useReducedMotion();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
+  const getHeaderOffset = useCallback(() => {
+    const header = document.querySelector<HTMLElement>(".site-header");
+    return (header?.getBoundingClientRect().height ?? 72) + 12;
+  }, []);
 
-      const sections = navLinks.map((link) => link.href.replace("#", ""))
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i])
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 120) {
-            setActiveSection(sections[i])
-            return
-          }
-        }
+  const updateActiveSection = useCallback(() => {
+    const lock = navigationLock.current;
+
+    if (lock && Date.now() < lock.expiresAt) {
+      const lockedSection = document.getElementById(lock.id);
+      const distanceFromTarget = lockedSection
+        ? Math.abs(lockedSection.getBoundingClientRect().top - getHeaderOffset())
+        : 0;
+
+      if (distanceFromTarget > 18) {
+        setActiveSection(lock.id);
+        return;
       }
-      setActiveSection("")
+
+      navigationLock.current = null;
     }
 
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    const headerOffset = getHeaderOffset();
+    const marker = headerOffset + Math.min(window.innerHeight * 0.18, 150);
+    const sections = ["hero", ...navLinks.map((link) => link.id)]
+      .map((id) => document.getElementById(id))
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    let nextSection: NavigationTarget = "hero";
+
+    for (const section of sections) {
+      const rect = section.getBoundingClientRect();
+
+      if (rect.top <= marker) {
+        nextSection = section.id as NavigationTarget;
+      }
+
+      if (rect.top <= marker && rect.bottom > marker) {
+        nextSection = section.id as NavigationTarget;
+        break;
+      }
+    }
+
+    setActiveSection((current) => (current === nextSection ? current : nextSection));
+  }, [getHeaderOffset]);
+
+  useEffect(() => {
+    const scheduleUpdate = () => {
+      setScrolled(window.scrollY > 24);
+
+      if (animationFrame.current !== null) return;
+
+      animationFrame.current = window.requestAnimationFrame(() => {
+        updateActiveSection();
+        animationFrame.current = null;
+      });
+    };
+
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+
+      if (animationFrame.current !== null) {
+        window.cancelAnimationFrame(animationFrame.current);
+      }
+    };
+  }, [updateActiveSection]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [mobileOpen]);
+
+  const navigateToSection = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    id: NavigationTarget,
+  ) => {
+    event.preventDefault();
+
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    navigationLock.current = {
+      id,
+      expiresAt: Date.now() + (reduceMotion ? 100 : 1600),
+    };
+
+    setActiveSection(id);
+    setMobileOpen(false);
+
+    const targetTop = section.getBoundingClientRect().top + window.scrollY - getHeaderOffset();
+
+    window.history.replaceState(null, "", `#${id}`);
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  };
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-xl"
-          : "bg-transparent"
-      }`}
-    >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        {/* Logo */}
+    <header
+  className={`site-header ${scrolled ? "site-header-scrolled" : ""}`}
+>
+      <nav className="site-nav" aria-label="Primary navigation">
         <a
-          href="#"
-          className="font-mono text-sm font-bold tracking-wider text-primary"
+          href="#hero"
+          className="brand-mark"
+          aria-label="Kareem Hanafy — home"
+          onClick={(event) => navigateToSection(event, "hero")}
         >
-          {`<${portfolioData.personal.name.split(" ")[0]} />`}
+          <span className="brand-name">
+            {portfolioData.personal.shortName}<span className="brand-dot">.</span>
+          </span>
         </a>
 
-        {/* Desktop nav */}
-        <ul className="hidden items-center gap-1 md:flex">
-          {navLinks.map((link) => {
-            const isActive = activeSection === link.href.replace("#", "")
-            return (
-              <li key={link.href} className="relative">
-                <a
-                  href={link.href}
-                  className={`relative z-10 block rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-200 ${
-                    isActive
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="active-nav-pill"
-                      className="absolute inset-0 rounded-md bg-primary/10"
-                      transition={{ type: "spring", stiffness: 400, damping: 32 }}
-                      style={{ zIndex: -1 }}
-                    />
-                  )}
-                  {link.label}
-                </a>
-              </li>
-            )
-          })}
-        </ul>
-
-        {/* Desktop CTA */}
-        <div className="hidden items-center gap-3 md:flex">
-          <a
-            href="#contact"
-            className="rounded-lg bg-primary px-4 py-1.5 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_20px_rgba(0,255,135,0.15)]"
-          >
-            Hire Me
-          </a>
+        <div className="desktop-nav" aria-label="Page sections">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={activeSection === link.id ? "active" : ""}
+              aria-current={activeSection === link.id ? "location" : undefined}
+              onClick={(event) => navigateToSection(event, link.id)}
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
 
-        {/* Mobile toggle */}
+        <a className="nav-contact" href={`mailto:${portfolioData.personal.email}`}>
+          <span>Let&apos;s talk</span>
+          <TechnicalArrow />
+        </a>
+
         <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="text-foreground md:hidden"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          type="button"
+          className="nav-menu-button"
+          onClick={() => setMobileOpen((value) => !value)}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-navigation"
+          aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
         >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          {mobileOpen ? <X size={19} /> : <Menu size={19} />}
         </button>
       </nav>
 
-      {/* Mobile menu */}
       <AnimatePresence>
-        {mobileOpen && (
+        {mobileOpen ? (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-b border-border bg-background/95 backdrop-blur-xl md:hidden"
+            id="mobile-navigation"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="mobile-nav-panel"
           >
-            <ul className="flex flex-col gap-1 px-6 py-4">
-              {navLinks.map((link) => {
-                const isActive = activeSection === link.href.replace("#", "")
-                return (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      className={`block rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                        isActive
-                          ? "bg-primary/10 text-primary"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                )
-              })}
-              <li className="pt-3">
+            <div className="mobile-nav-inner">
+              <p>Navigate</p>
+              {navLinks.map((link, index) => (
                 <a
-                  href="#contact"
-                  onClick={() => setMobileOpen(false)}
-                  className="block rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground"
+                  key={link.href}
+                  href={link.href}
+                  className={activeSection === link.id ? "active" : ""}
+                  aria-current={activeSection === link.id ? "location" : undefined}
+                  onClick={(event) => navigateToSection(event, link.id)}
                 >
-                  Hire Me
+                  <span>0{index + 1}</span>
+                  {link.label}
                 </a>
-              </li>
-            </ul>
+              ))}
+              <a className="mobile-nav-contact" href={`mailto:${portfolioData.personal.email}`}>
+                <span>{portfolioData.personal.email}</span>
+                <TechnicalArrow />
+              </a>
+            </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
-    </motion.header>
-  )
+    </header>
+  );
 }

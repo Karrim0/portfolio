@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const siteUrl = "https://kaghim.vercel.app/";
+const siteUrl = "https://kaghim.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

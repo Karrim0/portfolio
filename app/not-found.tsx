@@ -1,57 +1,30 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { ArrowLeft, Home } from "lucide-react"
-import Link from "next/link"
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowLeft, Home } from "lucide-react";
+import Link from "next/link";
 
 export default function NotFound() {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-6">
+    <main className="grid min-h-screen place-items-center px-5">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={reduceMotion ? false : { opacity: 0, y: 22 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
-        className="flex flex-col items-center gap-6 text-center"
+        transition={{ duration: 0.65 }}
+        className="w-full max-w-2xl rounded-[28px] border border-white/10 bg-white/[0.025] p-8 text-center sm:p-12"
       >
-        {/* Large 404 */}
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="font-mono text-8xl font-bold text-primary md:text-9xl"
-        >
-          404
-        </motion.h1>
-
-        <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-semibold text-foreground md:text-2xl">
-            Page not found
-          </h2>
-          <p className="max-w-md text-sm text-muted-foreground">
-            {"The page you're looking for doesn't exist or has been moved. Let's get you back on track."}
-          </p>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-primary">404 / Route not found</p>
+        <h1 className="mt-6 text-5xl font-semibold tracking-[-0.06em] text-foreground sm:text-7xl">This page is outside the system.</h1>
+        <p className="mx-auto mt-5 max-w-lg text-sm leading-7 text-muted-foreground">
+          The route may have moved or never existed. Head back to the portfolio and continue from there.
+        </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link href="/" className="button button-primary"><Home size={15} /> Go home</Link>
+          <button type="button" onClick={() => window.history.back()} className="button button-secondary"><ArrowLeft size={15} /> Go back</button>
         </div>
-
-        <div className="flex gap-3 pt-4">
-          <Link
-            href="/"
-            className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-all hover:brightness-110 hover:shadow-[0_0_30px_rgba(0,255,135,0.2)]"
-          >
-            <Home size={14} />
-            Go Home
-          </Link>
-          <button
-            onClick={() => window.history.back()}
-            className="flex items-center gap-2 rounded-lg border border-border bg-secondary px-5 py-2.5 text-sm font-semibold text-secondary-foreground transition-all hover:border-primary/50 hover:text-primary"
-          >
-            <ArrowLeft size={14} />
-            Go Back
-          </button>
-        </div>
-
-        {/* Decorative element */}
-        <div className="pointer-events-none absolute h-64 w-64 rounded-full bg-primary/5 blur-[100px]" />
       </motion.div>
-    </div>
-  )
+    </main>
+  );
 }

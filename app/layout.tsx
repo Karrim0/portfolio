@@ -1,89 +1,68 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Space_Mono } from "next/font/google";
+import type { ReactNode } from "react";
+import { Manrope, Space_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import "./globals.css";
 import { portfolioData } from "@/data/portfolio";
-import { CustomCursor } from "@/components/cursor";
+import { PrecisionCursor } from "@/components/precision-cursor";
+import "./globals.css";
 
-const siteUrl = "https://kaghim.vercel.app/";
+const siteUrl = "https://kaghim.vercel.app";
 
-const spaceGrotesk = Space_Grotesk({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-manrope",
+  display: "swap",
 });
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
-  variable: "--font-mono",
+  variable: "--font-space-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-
-  title: "Kareem Mohamed Hanafy | Frontend Developer",
+  title: {
+    default: "Kareem Mohamed Hanafy | Full-Stack Web Developer",
+    template: "%s | Kareem Hanafy",
+  },
   description:
-    "Kareem Mohamed Hanafy is a Frontend Developer based in Cairo, Egypt, specializing in React, Next.js, TypeScript, Tailwind CSS, responsive interfaces, API integration, and frontend performance.",
-
+    "Full-stack web developer building production-ready React and Next.js products, API-driven platforms, e-commerce systems, dashboards, multilingual experiences, and admin workflows.",
   keywords: [
     "Kareem Mohamed Hanafy",
-    "Kareem Mohamed",
-    "Karim Mohamed",
-    "Karim Hanafy",
-    "Kareem Hanafy",
-    "Kaghim",
-    "Frontend Developer",
+    "Full-Stack Web Developer Egypt",
     "React Developer",
     "Next.js Developer",
     "TypeScript Developer",
-    "Tailwind CSS Developer",
-    "Frontend Developer Cairo",
-    "React Developer Egypt",
-    "Next.js Portfolio",
+    "Frontend Engineer",
+    "Node.js Developer",
+    "E-commerce Developer",
   ],
-
-  authors: [{ name: "Kareem Mohamed Hanafy" }],
-  creator: "Kareem Mohamed Hanafy",
-  publisher: "Kareem Mohamed Hanafy",
-
+  authors: [{ name: portfolioData.personal.name, url: siteUrl }],
+  creator: portfolioData.personal.name,
+  alternates: { canonical: siteUrl },
   openGraph: {
-    title: "Kareem Mohamed Hanafy | Frontend Developer",
-    description:
-      "Frontend Developer specializing in React, Next.js, TypeScript, Tailwind CSS, responsive UI, API integration, and performance-focused web interfaces.",
+    title: "Kareem Mohamed Hanafy | Full-Stack Web Developer",
+    description: "Web products built from polished interface to reliable delivery.",
     url: siteUrl,
-    siteName: "Kareem Mohamed Hanafy Portfolio",
+    siteName: "Kareem Hanafy Portfolio",
     type: "profile",
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Kareem Mohamed Hanafy - Frontend Developer",
-      },
-    ],
   },
-
   twitter: {
     card: "summary_large_image",
-    title: "Kareem Mohamed Hanafy | Frontend Developer",
-    description:
-      "React, Next.js, TypeScript, and Tailwind CSS Frontend Developer based in Cairo, Egypt.",
-    images: ["/og.png"],
+    title: "Kareem Mohamed Hanafy | Full-Stack Web Developer",
+    description: "Production-ready web engineering with React, Next.js, TypeScript, APIs, and data systems.",
   },
-
-  robots: {
-    index: true,
-    follow: true,
-  },
-
+  robots: { index: true, follow: true },
   icons: {
-    icon: "/00.png",
-    apple: "/00.png",
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "#07080b",
   width: "device-width",
   initialScale: 1,
 };
@@ -94,68 +73,42 @@ function PersonJsonLd() {
     "@type": "ProfilePage",
     mainEntity: {
       "@type": "Person",
-      name: "Kareem Mohamed Hanafy",
-      alternateName: [
-        "Kareem Mohamed",
-        "Karim Mohamed",
-        "Karim Hanafy",
-        "Kareem Hanafy",
-      ],
-      jobTitle: "Frontend Developer",
-      description:
-        "Frontend Developer based in Cairo, Egypt, specializing in React, Next.js, TypeScript, Tailwind CSS, responsive web interfaces, API integration, and performance optimization.",
+      name: portfolioData.personal.name,
+      jobTitle: portfolioData.personal.title,
+      description: portfolioData.personal.bio,
       url: siteUrl,
-      image: `${siteUrl}/og.png`,
+      image: `${siteUrl}${portfolioData.personal.photo}`,
       address: {
         "@type": "PostalAddress",
-        addressLocality: "Cairo",
+        addressRegion: "Menofia",
         addressCountry: "EG",
       },
       knowsAbout: [
         "React",
         "Next.js",
         "TypeScript",
-        "Tailwind CSS",
-        "Frontend Development",
-        "Responsive Design",
-        "Accessibility",
-        "API Integration",
-        "Performance Optimization",
+        "Node.js",
+        "PostgreSQL",
+        "REST APIs",
+        "E-commerce",
+        "Admin dashboards",
+        "Multilingual web applications",
+        "Responsive web development",
       ],
-      sameAs: [
-  portfolioData.social.github,
-  portfolioData.social.linkedin,
-  portfolioData.social.twitter,
-  portfolioData.social.facebook,
-  portfolioData.social.instagram,
-],
+      sameAs: [portfolioData.social.github, portfolioData.social.linkedin],
     },
   };
 
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(jsonLd),
-      }}
-    />
-  );
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />;
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${spaceGrotesk.variable} ${spaceMono.variable} dark`}
-    >
-      <body className="font-sans antialiased">
+    <html lang="en" className={`${manrope.variable} ${spaceMono.variable}`}>
+      <body className="antialiased">
         <PersonJsonLd />
-        <CustomCursor />
         {children}
+        <PrecisionCursor />
         <Analytics />
       </body>
     </html>

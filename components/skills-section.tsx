@@ -1,132 +1,93 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Smartphone } from "lucide-react";
 import { useRef } from "react";
-import { Code2, Wrench, Compass, Layers } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
-import { SectionWrapper, SectionHeading } from "./section-wrapper";
+import { SectionHeading, SectionWrapper } from "./section-wrapper";
 
-const categories = [
-  {
-    key: "frontend" as const,
-    label: "Core Frontend",
-    icon: Code2,
-    description: "Main technologies I use to build interfaces",
-    dotClass: "bg-primary",
-  },
-  {
-    key: "frontendEngineering" as const,
-    label: "Frontend Engineering",
-    icon: Layers,
-    description: "How I structure and improve frontend work",
-    dotClass: "bg-emerald-400",
-  },
-  {
-    key: "tools" as const,
-    label: "Tools",
-    icon: Wrench,
-    description: "My development workflow and toolkit",
-    dotClass: "bg-muted-foreground/50",
-  },
-  {
-    key: "exploring" as const,
-    label: "Currently Exploring",
-    icon: Compass,
-    description: "Technologies I’m expanding into",
-    dotClass: "bg-violet-500",
-  },
+const stackRows = [
+  { label: "Frontend", values: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Radix / shadcn"] },
+  { label: "Backend & data", values: ["Node.js", "REST APIs", "PostgreSQL", "Prisma", "Supabase", "MySQL"] },
+  { label: "Web quality", values: ["Responsive UX", "Accessibility", "RTL / LTR", "SEO", "Performance"] },
+  { label: "Delivery", values: ["Git & GitHub", "Docker", "Vercel", "TypeScript", "ESLint", "Build checks"] },
 ];
 
 export function SkillsSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-90px" });
+  const reduceMotion = useReducedMotion();
 
   return (
-    <SectionWrapper id="skills" className="relative py-32">
-      <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+    <SectionWrapper id="capabilities" className="section-block">
+      <div className="page-shell">
+        <SectionHeading
+          index="02"
+          eyebrow="Web capabilities"
+          title="Strong frontend engineering, connected to the systems behind the interface."
+          description="The focus is modern web development: React and Next.js architecture, API-driven flows, databases, admin systems, multilingual products, quality, and production delivery."
+        />
 
-      <div className="mx-auto max-w-6xl px-6">
-        <SectionHeading label="02" title="Skills & Expertise" />
-
-        <div ref={ref} className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-          {categories.map((cat, catIndex) => {
-            const Icon = cat.icon;
-            const skills = portfolioData.skills[cat.key] ?? [];
-
-            return (
-              <motion.div
-                key={cat.key}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.6,
-                  delay: catIndex * 0.15,
-                  ease: "easeOut",
-                }}
-                className="group rounded-xl border border-border/50 bg-card p-6 transition-all hover:border-primary/30 hover:shadow-[0_0_40px_rgba(0,255,135,0.05)]"
+        <div ref={ref} className="capabilities-layout">
+          <div className="capability-list">
+            {portfolioData.capabilities.map((capability, index) => (
+              <motion.article
+                key={capability.title}
+                initial={reduceMotion ? false : { opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                transition={{ duration: 0.55, delay: reduceMotion ? 0 : index * 0.08 }}
+                className="capability-row"
               >
-                <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
-                    <Icon size={18} />
-                  </div>
-
-                  <div>
-                    <h3 className="text-sm font-semibold">{cat.label}</h3>
-                    <p className="text-xs text-muted-foreground">
-                      {cat.description}
-                    </p>
+                <span className="capability-number">{capability.number}</span>
+                <div className="capability-copy">
+                  <h3>{capability.title}</h3>
+                  <p>{capability.description}</p>
+                  <div className="capability-tags">
+                    {capability.items.map((item) => <span key={item}>{item}</span>)}
                   </div>
                 </div>
+                <ArrowUpRight className="capability-arrow" size={20} />
+              </motion.article>
+            ))}
+          </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {skills.map((skill, skillIndex) => (
-                    <motion.div
-                      key={skill}
-                      initial={{ opacity: 0, scale: 0.85 }}
-                      animate={inView ? { opacity: 1, scale: 1 } : {}}
-                      transition={{
-                        duration: 0.3,
-                        delay: catIndex * 0.15 + skillIndex * 0.06,
-                      }}
-className="flex items-center gap-1.5 whitespace-nowrap rounded-md border border-border/50 bg-secondary/60 px-2.5 py-1.5 text-xs text-foreground/80 transition-all hover:border-primary/30 hover:text-foreground"                    >
-                      <span
-                        className={`h-1.5 w-1.5 shrink-0 rounded-full ${cat.dotClass}`}
-                      />
-                      {skill}
-                    </motion.div>
-                  ))}
+          <motion.aside
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.97 }}
+            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.7, delay: 0.12 }}
+            className="stack-console"
+          >
+            <div className="stack-console-top">
+              <span>WEB STACK / WORKING SET</span>
+              <i />
+            </div>
+            <div className="stack-command">
+              <span>$</span> ship-web-product --accessible --reliable --production
+            </div>
+            <div className="stack-rows">
+              {stackRows.map((row, index) => (
+                <div className="stack-row" key={row.label}>
+                  <div><span>0{index + 1}</span><strong>{row.label}</strong></div>
+                  <p>{row.values.join(" · ")}</p>
                 </div>
-              </motion.div>
-            );
-          })}
+              ))}
+            </div>
+
+            <div className="stack-native-note">
+              <div className="stack-native-icon"><Smartphone size={15} /></div>
+              <div>
+                <span>{portfolioData.mobileSignal.title}</span>
+                <p>{portfolioData.mobileSignal.text}</p>
+                <small>{portfolioData.mobileSignal.stack.join(" · ")}</small>
+              </div>
+            </div>
+
+            <div className="stack-console-bottom">
+              <span className="console-status" />
+              Web-first, production-focused
+            </div>
+          </motion.aside>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="mt-8 flex flex-wrap items-center gap-6 text-xs text-muted-foreground"
-        >
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Core stack
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            Frontend practices
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />
-            Tools & workflow
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-violet-500" />
-            Currently exploring
-          </div>
-        </motion.div>
       </div>
     </SectionWrapper>
   );
