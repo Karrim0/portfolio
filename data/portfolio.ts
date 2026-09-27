@@ -36,100 +36,60 @@ export const portfolioData = {
     title: "Full-Stack Web Developer",
     headline:
       "I build web products that are clear, reliable, and ready for real business.",
-    bio: "I specialize in React, Next.js, and TypeScript, building complete web experiences across responsive interfaces, APIs, databases, admin dashboards, multilingual flows, and production delivery.",
+    bio: "Full-Stack Web Developer building and shipping responsive interfaces, APIs, authentication, relational data, administration systems, and multilingual web products.",
     location: "Menofia, Egypt",
     email: "karimhnfy1@gmail.com",
-    cvLink: "/Kareem_Hanafy_Frontend_Engineer_CV.pdf",
-    photo: "/kareem-hanafy.webp",
+    photo: "/profile/kareem-portrait.webp",
     availableForWork: true,
+    cvLink: "/Kareem_Hanafy_Full_Stack_CV.pdf",
   },
-
   social: {
     github: "https://github.com/Karrim0",
     linkedin: "https://www.linkedin.com/in/karim74/",
+    instagram: "https://www.instagram.com/kaghim_0/",
+    twitter: "https://x.com/kaghim_0",
   },
-
-  heroLayers: [
-    {
-      number: "01",
-      label: "Frontend",
-      value: "Responsive, accessible product interfaces",
-    },
-    {
-      number: "02",
-      label: "Application",
-      value: "APIs, authentication, and business workflows",
-    },
-    {
-      number: "03",
-      label: "Data",
-      value: "PostgreSQL, Prisma, Supabase, and permissions",
-    },
-    {
-      number: "04",
-      label: "Delivery",
-      value: "SEO, performance, verification, and deployment",
-    },
-  ],
-
-  capabilities: [
-    {
-      number: "01",
-      title: "Web Product Frontend",
-      description:
-        "Responsive interfaces designed around real user flows, reusable systems, API-driven states, accessibility, and multilingual RTL/LTR experiences.",
-      items: [
-        "React & Next.js",
-        "TypeScript",
-        "Tailwind & component systems",
-        "Responsive UX",
-      ],
-    },
-    {
-      number: "02",
-      title: "Backend & Data",
-      description:
-        "Server logic, authentication, databases, permissions, media, and administration workflows connected to the product instead of treated as separate pieces.",
-      items: [
-        "Node.js & REST APIs",
-        "PostgreSQL",
-        "Prisma & Supabase",
-        "Auth, RLS & roles",
-      ],
-    },
-    {
-      number: "03",
-      title: "Production Delivery",
-      description:
-        "Clean Git workflows, quality gates, performance work, technical SEO, deployment, and practical handoff for products that have to keep working after launch.",
-      items: [
-        "Git & GitHub",
-        "TypeScript & ESLint",
-        "SEO & performance",
-        "Vercel & Docker",
-      ],
-    },
-  ],
-
-  mobileSignal: {
-    title: "Native product extension",
-    text: "I also built an Expo and React Native companion for Gym Crew, sharing the same Supabase data model with the web product and supporting offline workout flows.",
-    stack: ["React Native", "Expo", "SQLite", "Offline sync"],
-  },
-
   projects: [
+    {
+      id: "nexus-capital",
+      title: "Nexus Capital Red Sea",
+      category: "Real estate platform",
+      status: "Client platform · Delivered",
+      description:
+        "A complete real-estate platform connecting property and project discovery to multilingual content and a custom business administration system.",
+      role: "End-to-end full-stack development",
+      challenge:
+        "Bring searchable property and project experiences, multilingual content, and business content management into one database-backed platform.",
+      outcome:
+        "A React and Vite frontend connected to a Laravel/PHP and MySQL backend, with searchable real-estate experiences and a complete custom admin dashboard.",
+      tags: ["React", "Vite", "Laravel", "PHP", "MySQL"],
+      // Nexus Capital
+cover: {
+  src: "/projects/nexus-capital/cover.webp",
+  alt: "Nexus Capital Red Sea real-estate platform interface",
+  label: "Real-estate platform",
+},
+      links: [
+        {
+          label: "Live platform",
+          href: "https://nexuscapitalredsea.com/",
+          kind: "live",
+        },
+      ],
+      featured: true,
+    },
     {
       id: "kidorly",
       title: "Kidorly",
       category: "Full-stack e-commerce",
       status: "Client product · Live",
       description:
-        "A multilingual commerce platform built from scratch for a kids mobility company selling scooters, hoverboards, ride-on cars, and related products.",
+        "A mobile-first Arabic, English, and German commerce platform with a protected admin system and server-verified checkout.",
       role: "End-to-end full-stack development",
       challenge:
         "Replace disconnected ordering and store operations with one maintainable platform that supports local customers, multilingual browsing, checkout, and day-to-day administration.",
       outcome:
-        "A complete storefront and admin system covering catalog, brands, orders, discounts, media, homepage content, shipping, local payment instructions, and website or WhatsApp ordering.",
+        "A Next.js storefront and protected admin system with catalog and order management, server-verified checkout, authentication, localized SEO, shipping, discounts, and media workflows.",
       tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "next-intl"],
       cover: {
         src: "/projects/kidorly/cover.webp",
@@ -143,17 +103,17 @@ export const portfolioData = {
           label: "Home",
         },
         {
-          src: "/projects/kidorly/storefront.webp",
+          src: "/projects/kidorly/cover.webp",
           alt: "Kidorly product storefront",
           label: "Storefront",
         },
         {
-          src: "/projects/kidorly/product.webp",
+          src: "/projects/kidorly/cover.webp",
           alt: "Kidorly product details page",
           label: "Product",
         },
         {
-          src: "/projects/kidorly/admin-dashboard.webp",
+          src: "/projects/kidorly/admin-cover.webp",
           alt: "Kidorly admin dashboard",
           label: "Admin",
         },
@@ -197,17 +157,17 @@ export const portfolioData = {
           label: "Home",
         },
         {
-          src: "/projects/menoufia/content.webp",
+          src: "/projects/menoufia/cover.webp",
           alt: "Menoufia University content sections",
           label: "Content",
         },
         {
-          src: "/projects/menoufia/faculties.webp",
+          src: "/projects/menoufia/cover.webp",
           alt: "Menoufia University faculty page",
           label: "Faculties",
         },
         {
-          src: "/projects/menoufia/global-search.webp",
+          src: "/projects/menoufia/cover.webp",
           alt: "Menoufia University global search",
           label: "Search",
         },
@@ -228,17 +188,17 @@ export const portfolioData = {
     },
     {
       id: "fourmap",
-      title: "Fourmap",
-      category: "Arabic business platform",
+      title: "FourMap",
+      category: "Engineering platform & CMS",
       status: "Saudi client · Delivered",
       description:
-        "A complete Arabic business website and custom content system built from scratch to replace an outdated site with a clearer brand presence and manageable operations.",
+        "An Arabic RTL engineering business platform with services, articles, consultations, uploads, authentication, and a complete custom content management system.",
       role: "Client project built end-to-end",
       challenge:
         "Modernize a weak legacy website and let the client control services, articles, media, partners, accreditations, settings, and search presentation without editing code.",
       outcome:
         "A responsive PHP and MySQL platform with a custom admin dashboard, inquiries, image uploads, and granular SEO controls for pages, services, and content.",
-      tags: ["PHP", "MySQL", "PDO", "JavaScript", "Technical SEO"],
+      tags: ["PHP", "MySQL", "PDO", "JavaScript", "Bootstrap"],
       cover: {
         src: "/projects/fourmap/cover.webp",
         alt: "Fourmap Arabic business website",
@@ -251,17 +211,17 @@ export const portfolioData = {
           label: "Home",
         },
         {
-          src: "/projects/fourmap/services.webp",
+          src: "/projects/fourmap/cover.webp",
           alt: "Fourmap services page",
           label: "Services",
         },
         {
-          src: "/projects/fourmap/admin-dashboard.webp",
+          src: "/projects/fourmap/admin-cover.webp",
           alt: "Fourmap admin dashboard",
           label: "Admin",
         },
         {
-          src: "/projects/fourmap/seo-management.webp",
+          src: "/projects/fourmap/cover.webp",
           alt: "Fourmap SEO management screen",
           label: "SEO",
         },
@@ -269,7 +229,7 @@ export const portfolioData = {
       links: [
         {
           label: "View live project",
-          href: "https://kaghim.wuaze.com/?i=1",
+          href: "https://fourmap.66ghz.com/",
           kind: "live",
         },
         {
@@ -372,44 +332,6 @@ export const portfolioData = {
       featured: false,
     },
     {
-      id: "gym-crew",
-      title: "Gym Crew",
-      category: "Web fitness product + native companion",
-      status: "Web live · Native companion in development",
-      description:
-        "A web-first workout product built end-to-end with Next.js and Supabase, then extended into a React Native and Expo companion for faster in-gym logging and offline-first training flows.",
-      role: "Web product architecture, full-stack development, and native extension",
-      challenge:
-        "Keep the web platform complete while making the highest-frequency workout actions faster on a phone inside the gym.",
-      outcome:
-        "A shared Supabase product model across web and mobile, with the native app acting as a focused companion rather than replacing the web experience.",
-      tags: ["Next.js", "Supabase", "React Native", "Expo", "Offline-first"],
-      cover: {
-        src: "/projects/gym-crew/cover.webp",
-        alt: "Gym Crew web and mobile product preview",
-        label: "Web + mobile",
-      },
-      links: [
-        {
-          label: "Live web app",
-          href: "https://gym-crew-one.vercel.app/",
-          kind: "live",
-        },
-        {
-          label: "Web source",
-          href: "https://github.com/Karrim0/gym-crew",
-          kind: "github",
-        },
-        {
-          label: "Mobile source",
-          href: "https://github.com/Karrim0/gym-crew-mobile",
-          kind: "github",
-        },
-      ],
-      featured: false,
-      mobileExtension: true,
-    },
-    {
       id: "prime-cart",
       title: "Prime Cart",
       category: "API-driven e-commerce frontend",
@@ -436,72 +358,71 @@ export const portfolioData = {
       ],
       featured: false,
     },
-  ] satisfies readonly PortfolioProject[],
-
-  experience: {
-    role: "Independent Web Developer",
-    company: "Freelance & contract work · Egypt and remote",
-    period: "2025 — Present · 1 year professional experience",
-    description:
-      "For the past year, I have delivered real web products for clients—from complete platforms built from scratch to frontend modernization inside existing applications. The work includes requirements, responsive frontend engineering, API integration, databases, admin dashboards, revisions, testing, deployment, and handoff.",
-    metrics: [
-      { value: "1 year", label: "Professional freelance delivery" },
-      { value: "4+", label: "Client web projects" },
-      { value: "2 markets", label: "Egyptian and Saudi clients" },
-    ],
-    timeline: [
-      {
-        period: "2025 — Present",
-        title: "Independent Web Developer",
-        subtitle: "Freelance, contract, and client product delivery",
-        badge: "Professional experience",
-        description:
-          "I translate real client requirements into responsive web products and take responsibility for the work from interface decisions through integration, revisions, deployment, and final delivery.",
-        highlights: [
-          "Built Kidorly and Fourmap from initial requirements through full product delivery.",
-          "Modernized existing React products for MFM Egypt and Shailla Farms.",
-          "Worked directly with Egyptian and Saudi clients, feedback cycles, deadlines, and production constraints.",
-        ],
-      },
-      {
-        period: "Foundation period · Before paid client work",
-        title: "Independent Product Development",
-        subtitle: "Focused React, Next.js, and API-driven project building",
-        badge: "Engineering foundation",
-        description:
-          "Before professional freelance delivery, I spent a focused period building complete projects to strengthen frontend architecture, API states, authentication, reusable components, responsive behavior, and product-level problem solving.",
-        highlights: [
-          "Built e-commerce and dashboard experiences beyond tutorial-level interfaces.",
-          "Practiced application architecture, state management, authentication, and API integration.",
-          "Developed the engineering foundation that now supports real client delivery.",
-        ],
-      },
-    ],
-    proof: [
-      {
-        title: "End-to-end client products",
-        text: "Complete product ownership across frontend, backend logic, data, administration, deployment, and handoff.",
-        projects: "Kidorly · Fourmap",
-      },
-      {
-        title: "Large frontend ownership",
-        text: "Complex responsive interfaces, multilingual architecture, API-driven modules, search, themes, and RTL/LTR behavior.",
-        projects: "Menoufia University Portal",
-      },
-      {
-        title: "Existing-product modernization",
-        text: "UI/UX refinement, responsive fixes, content restructuring, media updates, and new frontend functionality in live codebases.",
-        projects: "MFM Egypt · Shailla Farms",
-      },
-    ],
-  },
-
+    {
+      id: "nexus-workspace",
+      title: "Nexus Workspace",
+      category: "Project & team workspace",
+      status: "Independent product",
+      description:
+        "A workspace project bringing project organization, tasks, and team views into a connected Next.js application.",
+      role: "Full-stack product development",
+      challenge:
+        "Organize projects, tasks, and team information in a clear application structure with a shared domain and data layer.",
+      outcome:
+        "A Next.js workspace with project, task, and team views, shared data structures, API endpoints, and a Prisma/PostgreSQL foundation.",
+      tags: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "REST APIs"],
+      // Nexus Workspace
+cover: {
+  src: "/projects/nexus-workspace/cover.webp",
+  alt: "Nexus Workspace project, task, and team management interface",
+  label: "Workspace product",
+},
+      links: [],
+      featured: true,
+    },
+    {
+      id: "ovrld",
+      title: "OVRLD",
+      category: "Training product · PWA",
+      status: "Independent product",
+      description:
+        "A mobile-first training PWA bringing workout plans, logging, history, and progress into a consistent product experience.",
+      role: "Full-stack product architecture & development",
+      challenge:
+        "Keep training plans, workout logging, progress, and offline-aware storage consistent across one shared data model.",
+      outcome:
+        "A Next.js training product with authentication, PostgreSQL-backed data, RLS, and IndexedDB storage supporting offline-aware synchronization and consistent workout domain rules.",
+      tags: [
+        "Next.js",
+        "TypeScript",
+        "Supabase",
+        "PostgreSQL",
+        "RLS",
+        "IndexedDB",
+      ],
+      // OVRLD
+cover: {
+  src: "/projects/ovrld/cover.webp",
+  alt: "OVRLD mobile-first fitness training dashboard and workout logging interface",
+  label: "Training product",
+},
+      links: [
+        {
+          label: "Live product",
+          href: "https://ovrld.vercel.app/",
+          kind: "live",
+        },
+      ],
+      featured: true,
+    },
+  ],
   testimonials: [
     {
       author: "Rolmod C.",
       score: 5,
       projectAr: "تحويل كود HTML جاهز إلى موقع ROLMOD احترافي متكامل ومتجاوب",
-      projectEn: "ROLMod — turning an existing HTML build into a complete responsive website",
+      projectEn:
+        "ROLMod — turning an existing HTML build into a complete responsive website",
       quoteAr:
         "مبرمج محترف جداً، متعاون وسريع في تنفيذ التعديلات، واهتم بالتفاصيل حتى الوصول للنتيجة النهائية. المشروع تم تنفيذه بشكل ممتاز والتعامل معه كان مريحاً واحترافياً. أنصح به وبكل تأكيد سيكون لنا تعاملات قادمة بإذن الله. ❤️",
       quoteEn:
@@ -511,7 +432,8 @@ export const portfolioData = {
       author: "محمد ا.",
       score: 5,
       projectAr: "تطوير منصة SaaS لحساب الكميات والتسعير — Tas3eer Pro",
-      projectEn: "Tas3eer Pro — Full-Stack SaaS for quantity calculation and pricing",
+      projectEn:
+        "Tas3eer Pro — Full-Stack SaaS for quantity calculation and pricing",
       quoteAr:
         "تجربة ممتازة جداً مع المهندس كريم، مطور Full Stack محترف ومتمكن من أدواته، يمتلك حساً عالياً بالمسؤولية ويسعى دائماً لتقديم أفضل جودة ممكنة. كان متجاوباً وسريعاً في حل الملاحظات، وقدم دعماً فنياً رائعاً. شكراً جزيلاً لك كريم وأتطلع للعمل معك مجدداً في مشاريع قادمة.",
       quoteEn:
@@ -532,32 +454,9 @@ export const portfolioData = {
       score: 5,
       projectAr: "إنشاء موقع تعريفي",
       projectEn: "Corporate profile website",
-      quoteAr:
-        "كان متجاوب مع الملاحظات وأنجز المطلوب خلال مدة قصيرة.",
+      quoteAr: "كان متجاوب مع الملاحظات وأنجز المطلوب خلال مدة قصيرة.",
       quoteEn:
         "He was responsive to feedback and completed the required work within a short timeframe.",
     },
   ],
-
-  about: {
-    lead: "I started in frontend engineering and expanded into full-stack web development because strong interfaces depend on strong systems behind them.",
-    paragraphs: [
-      "My core focus is still the web: responsive React and Next.js products, API-driven experiences, e-commerce, dashboards, multilingual platforms, admin systems, and the backend and data workflows that support them.",
-      "I also built a focused React Native and Expo companion for Gym Crew. It is presented as an extension of the web product—not a change in my main positioning as a web developer.",
-    ],
-    principles: [
-      {
-        title: "Clarity",
-        text: "Make the next action and system state obvious.",
-      },
-      {
-        title: "Ownership",
-        text: "Understand and solve the complete workflow.",
-      },
-      {
-        title: "Reliability",
-        text: "Build for real content, data, permissions, and edge cases.",
-      },
-    ],
-  },
 } as const;
